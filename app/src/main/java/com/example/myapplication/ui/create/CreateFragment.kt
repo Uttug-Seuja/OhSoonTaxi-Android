@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.create
 
+import android.app.Activity.RESULT_OK
 import android.app.Application
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -12,13 +13,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentCreateBinding
 import com.example.myapplication.databinding.FragmentHomeBinding
+import com.example.myapplication.ui.create.CreateGenderActivity.Companion.INTENT_EXTRA_MSG
 import com.example.myapplication.ui.home.HomeFragment
 import com.example.myapplication.ui.home.HomeViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.util.*
+
 
 
 class CreateFragment  : Fragment() {
@@ -38,7 +46,6 @@ class CreateFragment  : Fragment() {
     private var content : String? = null
     private var member : Int? = null
     private val genderMap = hashMapOf<String, String>("남녀 모두" to "ALL", "남자만" to "MAN", "여자만" to "WOMAN" )
-    private val sportsMap = hashMapOf<String, String>("축구" to "SOCCER", "풋살" to "FUTSAL", "런닝" to "RUNNING", "농구" to "BASKETBALL" )
 
     var historyTitle: String? = null
     var historyMood: String? = null
@@ -75,33 +82,42 @@ class CreateFragment  : Fragment() {
     ): View? {
 
         _binding = FragmentCreateBinding.inflate(inflater, container, false)
-//        viewModel = ViewModelProvider(this).get(CreateViewModel::class.java)
+        binding.viewmodel = viewModel
 
 
-
-
-        setOnClickListener()
         return binding.root
 
 
     }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setOnClickListener()
+    }
 
     private fun setOnClickListener(){
 
-
-
-        binding.seatText.setOnClickListener {
-            startActivity( Intent(activity, CreateSeatActivity::class.java))
+        binding.startBtn.setOnClickListener {
+            viewModel.onCreatePromiseClicked()
         }
 
         binding.genderSelectBtn.setOnClickListener {
-            startActivity( Intent(activity, CreateGenderActivity::class.java))
+            CreateGenderActivity.createIntent(requireActivity(), "A Child Callback OK!!").also {
+                genderForResult.launch(it)
+            }
+
         }
+
+        binding.seatSelectBtn.setOnClickListener {
+            CreateSeatActivity.createIntent(requireActivity(), "A Child Callback OK!!").also {
+                seatForResult.launch(it)
+            }
+        }
+
 
         // 히스토리 날짜 입력
         binding.dateSelectBtn.setOnClickListener {
             val datePicker = DatePickerDialog(
-                activity!!,
+                requireActivity(),
                 DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
 
                     historyDate =
@@ -124,9 +140,9 @@ class CreateFragment  : Fragment() {
         }
 
         // 히스토리 시작 시간 입력
-        binding.editReservationTime.setOnClickListener {
+        binding.reservationTimeBtn.setOnClickListener {
             val timePicker = TimePickerDialog(
-                activity!!, R.style.TimePicker,
+                requireActivity(), R.style.TimePicker,
                 TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
                     //TimePicker 특성 상 한자리 시간 입력에 대한 대응을 해줘야 함
                     historyTime =
@@ -135,7 +151,7 @@ class CreateFragment  : Fragment() {
                     historyTime +=
                         if (minute < 10) " 0${minute}분"
                         else " ${minute}분"
-                    binding.editReservationTime.text =historyTime.toString()
+                    binding.reservationTimeText.text =historyTime.toString()
 
                 }, hour, minute, false
             )
@@ -157,4 +173,23 @@ class CreateFragment  : Fragment() {
         }
 
     }
+
+    private val genderForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                RESULT_OK -> {
+                    binding.genderText.text = result.data!!.getStringExtra("genderType")
+                }
+            }
+        }
+
+    private val seatForResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            when (result.resultCode) {
+                RESULT_OK -> {
+                    binding.seatText.text = result.data!!.getStringExtra("seatType")
+                }
+            }
+        }
+
 }

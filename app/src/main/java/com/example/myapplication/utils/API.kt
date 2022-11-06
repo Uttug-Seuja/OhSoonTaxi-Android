@@ -1,6 +1,7 @@
 package com.example.myapplication.utils
 
 import com.example.myapplication.BuildConfig
+import com.example.myapplication.utils.API.BASE_URL
 
 object API {
     const val BASE_URL : String = BuildConfig.BASE_URL // 서버 주소

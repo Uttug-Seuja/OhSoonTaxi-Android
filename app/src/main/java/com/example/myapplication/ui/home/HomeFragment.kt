@@ -1,24 +1,24 @@
 package com.example.myapplication.ui.home
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.example.myapplication.R
+import com.example.myapplication.adapter.CalendarAdapter
 import com.example.myapplication.data.CalendarDateModel
 import com.example.myapplication.databinding.FragmentHomeBinding
-import com.example.myapplication.adapter.CalendarAdapter
 import com.example.myapplication.ui.search.SearchActivity
 import com.junjange.soondong.utils.HorizontalItemDecoration
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
 
@@ -37,6 +37,12 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
         return HomeFragment()
     }
 
+    override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater {
+        val inflater = super.onGetLayoutInflater(savedInstanceState)
+        val contextThemeWrapper: Context = ContextThemeWrapper(requireContext(), R.style.Theme_home_OhSoonTaxiAndroid)
+        return inflater.cloneInContext(contextThemeWrapper)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("ttt", "onCreate 실행")
@@ -49,7 +55,13 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
         savedInstanceState: Bundle?,
     ): View? {
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        val themedInflater =
+            inflater.cloneInContext(ContextThemeWrapper(requireActivity(), R.style.Theme_home_OhSoonTaxiAndroid))
+
+
+        _binding = FragmentHomeBinding.inflate(themedInflater, container, false)
+
+//        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         setUpDateAdapter()
@@ -61,7 +73,6 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
             val intent = Intent(activity, SearchActivity::class.java)
             startActivity(intent)
         }
-
 
         return binding.root
 
