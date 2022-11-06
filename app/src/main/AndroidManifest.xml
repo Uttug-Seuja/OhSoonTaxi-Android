@@ -14,7 +14,21 @@
         android:theme="@style/Theme.OhSoonTaxiAndroid"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".UpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CreateGenderActivity"
+            android:exported="false"
+            android:label="@string/title_activity_create_gender"
+            android:theme="@style/Theme.OhSoonTaxiAndroid.NoActionBar" />
+        <activity
+            android:name=".CreateSeatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.search.SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NaviHostActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

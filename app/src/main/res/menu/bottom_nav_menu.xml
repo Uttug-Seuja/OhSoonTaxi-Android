@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="홈" />
+
+    <item
+        android:id="@+id/navigation_create"
+        android:icon="@drawable/ic_baseline_add_box_24"
+        android:title="등록" />
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/ic_baseline_notifications_24"
+        android:title="알림" />
+
+    <item
+        android:id="@+id/navigation_my_info"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="내 정보" />
+
+
+</menu>
