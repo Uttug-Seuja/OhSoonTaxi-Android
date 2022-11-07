@@ -1,7 +1,9 @@
 package com.example.myapplication
 
+import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+//import android.support.v4.app.ActivityCompat
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -34,6 +36,15 @@ class NaviHostActivity : AppCompatActivity() {
         homeFragment = HomeFragment().newInstance()
         supportFragmentManager.beginTransaction().add(R.id.nav_host_fragment_activity_main, HomeFragment().newInstance()).commit()
 
+        // Get permission
+        val permissionList = arrayOf<String>(
+            // 위치 권한
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+        )
+
+        // 권한 요청
+//        ActivityCompat.requestPermissions(this@NaviHostActivity, permissionList, 1)
 
     }
 

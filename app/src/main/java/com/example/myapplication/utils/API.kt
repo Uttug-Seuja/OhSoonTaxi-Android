@@ -1,10 +1,10 @@
 package com.example.myapplication.utils
 
 import com.example.myapplication.BuildConfig
-import com.example.myapplication.utils.API.BASE_URL
+//import com.example.myapplication.utils.API.BASE_URL
 
 object API {
-    const val BASE_URL : String = BuildConfig.BASE_URL // 서버 주소
+    const val BASE_URL : String = BuildConfig.API_KEY // 서버 주소
 
     // participants
     const val POST_PARTICIPATION : String = "/participants/participation"

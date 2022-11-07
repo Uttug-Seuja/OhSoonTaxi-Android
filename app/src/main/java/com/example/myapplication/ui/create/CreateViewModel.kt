@@ -30,15 +30,11 @@ class CreateViewModel(private val repository: CreateRepository) : ViewModel() {
             titleEvent = MutableStateFlow("")
             startPlaceEvent = MutableStateFlow("")
             destinationEvent = MutableStateFlow("")
-            seatEvent = MutableStateFlow("모집 좌석")
+            seatEvent = MutableStateFlow("좌석 선택")
             genderEvent = MutableStateFlow("모집 성별")
             dateEvent = MutableStateFlow("약속 날짜")
             reservationTimeEvent = MutableStateFlow("약속 시간")
 
-            genderEvent.collectLatest {
-                Log.d("Ttt", it.toString())
-
-            }
         }
     }
 

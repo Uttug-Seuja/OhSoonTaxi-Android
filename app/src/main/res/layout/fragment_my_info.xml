@@ -1,14 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.my_info.MyInfoFragment">
+    android:orientation="vertical"
+    android:background="#ffffff">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_width="132dp"
+        android:layout_height="37dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="64dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="My Page"
+        android:textColor="#bbb1e5"
+        android:textSize="28sp"
+        android:textStyle="normal" />
 
-</FrameLayout>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="91dp"
+        android:layout_height="91dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="32dp" />
+
+    <TextView
+        android:layout_width="133dp"
+        android:layout_height="26dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="13dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center_horizontal"
+        android:text="Jeniffer"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:layout_width="187dp"
+        android:layout_height="16dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif"
+        android:gravity="center_horizontal"
+        android:text="jeefffiiif@gmail.com"
+        android:textColor="#9a9a9a"
+        android:textSize="12sp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:layout_width="298dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="64.7dp"
+        android:layout_marginTop="60dp"
+        android:fontFamily="sans-serif"
+        android:text="Information"
+        android:textColor="#c4bfbf"
+        android:textSize="12sp"
+        android:textStyle="normal" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/edit_information_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="21dp"
+        android:layout_marginLeft="64.7dp"
+        android:layout_marginTop="4dp"
+        android:background="#00000000"
+        android:fontFamily="sans-serif"
+        android:gravity="left"
+        android:text="Edit Informaion"
+        android:textAllCaps="false"
+        android:textColor="#3b3b3b"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+
+    <View
+        android:layout_width="307.2dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="60.4dp"
+        android:layout_marginTop="15.5dp"
+        android:background="#d9d6d6"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="64.7dp"
+        android:layout_marginTop="23.5dp"
+        android:fontFamily="sans-serif"
+        android:text="Polls"
+        android:textColor="#c4bfbf"
+        android:textSize="12sp"
+        android:textStyle="normal" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/my_polls_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="21dp"
+        android:layout_marginLeft="64.7dp"
+        android:layout_marginTop="8dp"
+        android:background="#00000000"
+        android:fontFamily="sans-serif"
+        android:gravity="left"
+        android:text="My Polls"
+        android:textAllCaps="false"
+        android:textColor="#3b3b3b"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/my_ballot_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="21dp"
+        android:layout_marginLeft="64.7dp"
+        android:layout_marginTop="8dp"
+        android:background="#00000000"
+        android:fontFamily="sans-serif"
+        android:gravity="left"
+        android:text="My Ballot"
+        android:textAllCaps="false"
+        android:textColor="#3b3b3b"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+    <View
+        android:layout_width="307.2dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="60.4dp"
+        android:layout_marginTop="15.5dp"
+        android:background="#d9d6d6"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="64.7dp"
+        android:layout_marginTop="23.5dp"
+        android:fontFamily="sans-serif"
+        android:text="Application"
+        android:textColor="#c4bfbf"
+        android:textSize="12sp"
+        android:textStyle="normal" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/app_information_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="21dp"
+        android:layout_marginLeft="64.7dp"
+        android:layout_marginTop="8dp"
+        android:background="#00000000"
+        android:fontFamily="sans-serif"
+        android:gravity="left"
+        android:text="App Information"
+        android:textAllCaps="false"
+        android:textColor="#3b3b3b"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/contact_us_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="21dp"
+        android:layout_marginLeft="64.7dp"
+        android:layout_marginTop="8dp"
+        android:background="#00000000"
+        android:fontFamily="sans-serif"
+        android:gravity="left"
+        android:text="Contact Us"
+        android:textAllCaps="false"
+        android:textColor="#3b3b3b"
+        android:textSize="16sp"
+        android:textStyle="normal" />
+    <View
+        android:layout_width="307.2dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="60.4dp"
+        android:layout_marginTop="15.5dp"
+        android:background="#d9d6d6"/>
+</LinearLayout>

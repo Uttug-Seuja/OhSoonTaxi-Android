@@ -85,11 +85,17 @@
                     android:textSize="16sp" />
 
                 <View
-
                     android:layout_width="match_parent"
                     android:layout_height="1.5dp"
                     android:layout_marginTop="15dp"
                     android:background="#eeeeee"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_start_place_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"/>
 
                 <EditText
                     android:id="@+id/edit_destination"
@@ -109,6 +115,13 @@
                     android:layout_height="1.5dp"
                     android:layout_marginTop="15dp"
                     android:background="#eeeeee"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_destination_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone"/>
 
                 <RelativeLayout
                     android:id="@+id/gender_select_btn"
@@ -137,11 +150,31 @@
                         android:src="@drawable/ic_next"
                         />
                 </RelativeLayout>
+                <View
+
+                    android:layout_width="match_parent"
+                    android:layout_height="1.5dp"
+                    android:background="#eeeeee"/>
+
+
+                <EditText
+                    android:id="@+id/edit_recurit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@null"
+                    android:ems="10"
+                    android:hint="모집 인원을 알려주세요"
+                    android:textColor="#5C5C5C"
+                    android:inputType="number"
+                    android:textSize="16sp" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1.5dp"
+                    android:layout_marginTop="15dp"
                     android:background="#eeeeee"/>
+
 
                 <RelativeLayout
                     android:id="@+id/seat_select_btn"
@@ -260,6 +293,7 @@
 
 
 
+
                 <TextView
                     android:id="@+id/content_text"
                     android:layout_width="match_parent"
@@ -270,7 +304,6 @@
                     android:ems="10"
                     android:gravity="start"
                     android:hint="* 참고사항 *\n• 장소는 작성자가 직접 섭외해주셔야 합니다.\n• 대운동장 예약은 별개로 예약하셔야 합니다.\n• 게시글 수정 시 인원수는 변경할 수 없습니다."
-                    android:minHeight="160dp"
                     android:textColor="#5C5C5C"
                     android:textSize="16sp" />
 
@@ -280,6 +313,7 @@
                     android:layout_height="59dp"
                     android:backgroundTint="@color/calender_picker"
                     app:cardCornerRadius="15dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginBottom="28dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

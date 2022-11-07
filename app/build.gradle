@@ -21,8 +21,19 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+
         // url 변수 지정
-        buildConfigField "String", "BASE_URL", properties['url.base']
+        buildConfigField "String", "URL_WEATHER", properties['url.weather']
+
+        // api key 변수 지정
+        buildConfigField "String", "API_KEY", properties['api.key']
+
+        // kakao map rest api key 변수 지정
+        buildConfigField "String", "KAKAO_MAP_REST_API_KEY", properties['kakao.map.rest.api.key']
+
+        buildConfigField "String", "KAKAO_MAP_NATIVE_KEY", properties['KAKAO_MAP_NATIVE_KEY']
+
+
     }
 
     buildTypes {
@@ -89,6 +100,16 @@ dependencies {
     // Preferences Data Store
     implementation "androidx.datastore:datastore-preferences:1.0.0-alpha07"
     implementation "androidx.datastore:datastore-core:1.0.0-alpha07"
+
+    // 위치
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+//
+//    // 권한
+    implementation "io.github.ParkSangGwon:tedpermission:2.3.0"
+//
+//    // Kakao map
+    implementation files('libs/libDaumMapAndroid.jar')
+
 
 
 }
