@@ -76,6 +76,11 @@ class CreateFragment : Fragment() {
     var historyDate: String? = null
     var historyTime: String? = null
 
+    var startPlaceX: Double? = null
+    var startPlaceY: Double? = null
+    var destinationX: Double? = null
+    var destinationY: Double? = null
+
     // Date, Time Picker 기본 값으로 사용될 현재 날짜 및 시각 가져옴
     private val calendarInstance = Calendar.getInstance()
     private val year = calendarInstance.get(Calendar.YEAR)
@@ -169,13 +174,20 @@ class CreateFragment : Fragment() {
 //                val mapPoint = MapPoint.mapPointWithGeoCoord(listItems[position].y, listItems[position].x)
 //                binding.mapView.setMapCenterPointAndZoomLevel(mapPoint, 1, true)
 
-                Log.d("ttt", binding.editStartPlace.isFocused.toString())
+
+
 
                 if (binding.editStartPlace.isFocused) {
                     binding.rvStartPlaceList.visibility = View.GONE
                     binding.editStartPlace.clearFocus()
                     binding.editStartPlace.setText(itemList[position].name)
                     Log.d("ttt22", binding.editStartPlace.isFocused.toString())
+                    startPlaceX = itemList[position].x
+                    startPlaceY = itemList[position].y
+
+                    Log.d("ttt", itemList[position].x.toString())
+                    Log.d("ttt", itemList[position].y.toString())
+
 
                 }
 
@@ -183,6 +195,10 @@ class CreateFragment : Fragment() {
                     binding.rvDestinationList.visibility = View.GONE
                     binding.editDestination.clearFocus()
                     binding.editDestination.setText(itemList[position].name)
+                    destinationX = itemList[position].x
+                    destinationY = itemList[position].y
+                    Log.d("ttt", itemList[position].x.toString())
+                    Log.d("ttt", itemList[position].y.toString())
                 }
                 imm.hideSoftInputFromWindow(requireActivity().currentFocus?.windowToken, 0)
                 listItems.clear()

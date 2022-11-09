@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.home
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
@@ -14,10 +15,12 @@ import com.example.myapplication.R
 import com.example.myapplication.adapter.CalendarAdapter
 import com.example.myapplication.data.CalendarDateModel
 import com.example.myapplication.databinding.FragmentHomeBinding
+import com.example.myapplication.ui.detail.DetailActivity
 import com.example.myapplication.ui.search.SearchActivity
 import com.junjange.soondong.utils.HorizontalItemDecoration
 import java.text.SimpleDateFormat
 import java.util.*
+import com.kakao.util.maps.helper.Utility
 
 
 class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
@@ -47,6 +50,9 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
         super.onCreate(savedInstanceState)
         Log.d("ttt", "onCreate 실행")
 
+        var keyHash = Utility.getKeyHash(activity)
+        Log.v(TAG, keyHash)
+
     }
 
 
@@ -70,7 +76,7 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
         binding.recyclerView.scrollToPosition(currentDate.get(Calendar.DATE) - 1)
 
         binding.searchViewLayout.setOnClickListener {
-            val intent = Intent(activity, SearchActivity::class.java)
+            val intent = Intent(activity, DetailActivity::class.java)
             startActivity(intent)
         }
 

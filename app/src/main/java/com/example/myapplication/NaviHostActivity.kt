@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.app.ActivityCompat
 import com.example.myapplication.databinding.ActivityNaviHostBinding
 import com.example.myapplication.ui.create.CreateFragment
 import com.example.myapplication.ui.home.HomeFragment
@@ -44,7 +45,7 @@ class NaviHostActivity : AppCompatActivity() {
         )
 
         // 권한 요청
-//        ActivityCompat.requestPermissions(this@NaviHostActivity, permissionList, 1)
+        ActivityCompat.requestPermissions(this@NaviHostActivity, permissionList, 1)
 
     }
 
