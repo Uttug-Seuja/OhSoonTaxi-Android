@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.Manifest
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 //import android.support.v4.app.ActivityCompat
@@ -9,7 +10,9 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import com.example.myapplication.databinding.ActivityNaviHostBinding
+import com.example.myapplication.ui.create.CreateActivity
 import com.example.myapplication.ui.create.CreateFragment
+import com.example.myapplication.ui.detail.DetailActivity
 import com.example.myapplication.ui.home.HomeFragment
 import com.example.myapplication.ui.my_info.MyInfoFragment
 import com.example.myapplication.ui.notifications.NotificationsFragment
@@ -60,8 +63,11 @@ class NaviHostActivity : AppCompatActivity() {
 
             }
             R.id.navigation_create -> {
-                createFragment = CreateFragment().newInstance()
-                supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment_activity_main, createFragment).commit()
+                val intent = Intent(this, CreateActivity::class.java)
+                startActivity(intent)
+                return@OnNavigationItemSelectedListener false
+//                createFragment = CreateFragment().newInstance()
+//                supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment_activity_main, createFragment).commit()
                 Log.d("ttt","추가하기")
 
 

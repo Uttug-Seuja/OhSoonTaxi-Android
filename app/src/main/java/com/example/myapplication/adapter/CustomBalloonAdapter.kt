@@ -16,14 +16,14 @@ class CustomBalloonAdapter(inflater: LayoutInflater): CalloutBalloonAdapter {
     override fun getCalloutBalloon(poiItem: MapPOIItem?): View {
         // 마커 클릭 시 나오는 말풍선
         name.text = poiItem?.itemName
-        address.text = "${poiItem?.itemName} 가즈앗~"
+        address.text = "오늘의 순천향 택시"
         return mCalloutBalloon
     }
 
     override fun getPressedCalloutBalloon(poiItem: MapPOIItem?): View {
 
         // 말풍선 클릭 시
-        address.text = "getPressedCalloutBalloon"
+        address.text = "오순택!"
         return mCalloutBalloon
     }
 }

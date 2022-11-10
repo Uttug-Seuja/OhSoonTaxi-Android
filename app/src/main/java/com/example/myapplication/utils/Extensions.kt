@@ -1,10 +1,16 @@
 package com.example.myapplication.utils
 
 import android.content.ContentValues.TAG
+import android.graphics.Color
 import android.text.Editable
+import android.text.SpannableStringBuilder
+import android.text.Spanned
 import android.text.TextWatcher
+import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.util.Log
 import android.widget.EditText
+import android.widget.TextView
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -45,4 +51,32 @@ fun EditText.textChangesToFlow(): Flow<CharSequence?> {
         emit(text)
     }
 
+}
+
+
+
+object Constants {
+
+    fun textChangeColor(text : TextView, color: String, start : Int, end : Int) : SpannableStringBuilder {
+
+        // 1. SpannableStringBuilder 타입으로 변환
+        val builder = SpannableStringBuilder(text.text.toString())
+
+        // 2. index=4에 해당하는 문자열(4)에 색 적용
+        builder.setSpan(ForegroundColorSpan(Color.parseColor(color)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        return builder
+    }
+
+    fun textChangeStyle(text : TextView, style: StyleSpan, start : Int, end : Int) : SpannableStringBuilder{
+
+        // 1. SpannableStringBuilder 타입으로 변환
+        val builder = SpannableStringBuilder(text.text.toString())
+
+        // 2. index=4에 해당하는 문자열(4)에 색 적용
+        builder.setSpan(style, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        return builder
+
+    }
 }
