@@ -4,10 +4,11 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.myapplication.repository.DetailRepository
 import com.example.myapplication.repository.SearchRepository
 import kotlinx.coroutines.launch
 
-class DetailViewModel(private val repository: SearchRepository) : ViewModel(){
+class DetailViewModel(private val repository: DetailRepository) : ViewModel(){
 //    private val _retrofitSearchList = MutableLiveData<HashtagName>()
 //
 //    // LiveData
@@ -20,7 +21,7 @@ class DetailViewModel(private val repository: SearchRepository) : ViewModel(){
 
     class Factory(private val application: Application) : ViewModelProvider.Factory { // factory pattern
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return DetailViewModel(SearchRepository.getInstance(application)!!) as T
+            return DetailViewModel(DetailRepository.getInstance(application)!!) as T
         }
     }
 

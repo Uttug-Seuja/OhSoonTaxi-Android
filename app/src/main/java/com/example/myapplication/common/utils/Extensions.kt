@@ -1,6 +1,5 @@
-package com.example.myapplication.utils
+package com.example.myapplication.common.utils
 
-import android.content.ContentValues.TAG
 import android.graphics.Color
 import android.text.Editable
 import android.text.SpannableStringBuilder
@@ -8,7 +7,6 @@ import android.text.Spanned
 import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import android.util.Log
 import android.widget.EditText
 import android.widget.TextView
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -22,6 +22,17 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".MyInterestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MyUsageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MyCreateActivity"
+            android:exported="false"
+            android:label="@string/title_activity_my_create"
+            android:theme="@style/Theme.OhSoonTaxiAndroid.NoActionBar" />
+        <activity
             android:name=".ui.create.CreateActivity"
             android:exported="false" />
         <activity
@@ -35,6 +46,15 @@
             android:value="302dd9872b320edce50ead143cfad534" />
 
         <activity
+            android:name=".ui.signin.SigninActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.signup.SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NaviHostActivity"
+            android:exported="true" />
+        <activity
             android:name=".ui.detail.DetailActivity"
             android:exported="false" />
         <activity
@@ -46,13 +66,10 @@
             android:label="@string/title_activity_create_gender"
             android:theme="@style/Theme.OhSoonTaxiAndroid.NoActionBar" />
         <activity
-            android:name=".ui.create.CreateSeatActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.search.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".NaviHostActivity"
+            android:name=".ui.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

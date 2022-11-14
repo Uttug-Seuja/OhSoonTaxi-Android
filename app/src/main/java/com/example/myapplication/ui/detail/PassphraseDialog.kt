@@ -8,9 +8,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import com.example.myapplication.R
 import com.example.myapplication.databinding.ActivityPassphraseDialogBinding
-import com.example.myapplication.utils.Constants
 
 class PassphraseDialog : AppCompatActivity() {
     private val binding by lazy { ActivityPassphraseDialogBinding.inflate(layoutInflater) }

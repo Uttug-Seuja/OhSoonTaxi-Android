@@ -16,4 +16,5 @@
     <string name="title_activity_gender">GenderActivity</string>
     <string name="title_activity_create_gender">CreateGenderActivity</string>
     <string name="title_activity_passphrase_dialog">PassphraseDialog</string>
+    <string name="title_activity_my_create">MyCreateActivity</string>
 </resources>

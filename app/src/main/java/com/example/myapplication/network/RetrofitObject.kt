@@ -1,6 +1,6 @@
 package com.example.myapplication.network
 
-import com.example.myapplication.utils.API
+import com.example.myapplication.common.utils.API
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

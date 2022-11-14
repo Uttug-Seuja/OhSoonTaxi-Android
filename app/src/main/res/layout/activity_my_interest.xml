@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.myapplication.ui.notifications.NotificationsViewModel" />
+            type="com.example.myapplication.ui.my_info.my_interest.MyInterestActivity" />
     </data>
 
     <LinearLayout
@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center_horizontal"
-                android:text="알림"
+                android:text="관심목록"
                 android:textColor="@color/black"
                 android:textSize="18dp"
                 android:textStyle="bold" />
@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="아직 알림이 없습니다."
+            android:text="아직 관심 목록이 없습니다."
             android:background="#ffffff"
             android:orientation="vertical"
             android:visibility="visible">

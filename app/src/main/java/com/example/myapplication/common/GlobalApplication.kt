@@ -1,7 +1,6 @@
-package com.example.myapplication.component
+package com.example.myapplication.common
 
 import android.app.Application
-import com.example.myapplication.BuildConfig
 
 class GlobalApplication : Application() {
     override fun onCreate() {

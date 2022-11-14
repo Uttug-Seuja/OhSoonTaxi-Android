@@ -25,20 +25,31 @@
         <entry key="app/src/main/res/drawable-v24/dialog_bg.xml" value="0.133" />
         <entry key="app/src/main/res/drawable-v24/home_top_bg.xml" value="0.1595" />
         <entry key="app/src/main/res/drawable/seat_color_change.xml" value="0.149" />
-        <entry key="app/src/main/res/layout/activity_create.xml" value="0.26742706298828123" />
+        <entry key="app/src/main/res/layout/activity_create.xml" value="0.22230987548828124" />
         <entry key="app/src/main/res/layout/activity_create_gender.xml" value="0.14010416666666667" />
         <entry key="app/src/main/res/layout/activity_create_seat.xml" value="0.14010416666666667" />
         <entry key="app/src/main/res/layout/activity_detail.xml" value="0.23802940157562377" />
+        <entry key="app/src/main/res/layout/activity_my_create.xml" value="0.26313405797101447" />
+        <entry key="app/src/main/res/layout/activity_my_interest.xml" value="0.26313405797101447" />
+        <entry key="app/src/main/res/layout/activity_my_usage.xml" value="0.26313405797101447" />
         <entry key="app/src/main/res/layout/activity_navi_host.xml" value="0.146875" />
         <entry key="app/src/main/res/layout/activity_passphrase_dialog.xml" value="0.38719431559244794" />
-        <entry key="app/src/main/res/layout/activity_search.xml" value="0.3252919514973958" />
+        <entry key="app/src/main/res/layout/activity_register.xml" value="0.140625" />
+        <entry key="app/src/main/res/layout/activity_search.xml" value="0.19076283772786462" />
+        <entry key="app/src/main/res/layout/activity_signin.xml" value="0.22353902623273322" />
+        <entry key="app/src/main/res/layout/activity_signup.xml" value="0.125384521484375" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.26313405797101447" />
         <entry key="app/src/main/res/layout/activity_update.xml" value="0.14010416666666667" />
         <entry key="app/src/main/res/layout/balloon_layout.xml" value="0.140625" />
         <entry key="app/src/main/res/layout/bottom_sheet_seat_layout.xml" value="0.26313405797101447" />
         <entry key="app/src/main/res/layout/fragment_create.xml" value="0.21386718750000006" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.18896261021710825" />
-        <entry key="app/src/main/res/layout/fragment_my_info.xml" value="0.14010416666666667" />
+        <entry key="app/src/main/res/layout/fragment_my_info.xml" value="0.2621454874674479" />
         <entry key="app/src/main/res/layout/fragment_notifications.xml" value="0.140625" />
+        <entry key="app/src/main/res/layout/fragment_second.xml" value="0.15572916666666667" />
+        <entry key="app/src/main/res/layout/item_recycler_date.xml" value="0.26313405797101447" />
+        <entry key="app/src/main/res/layout/item_recycler_match.xml" value="0.15572916666666667" />
+        <entry key="app/src/main/res/layout/item_recycler_promise.xml" value="0.32580820719401044" />
         <entry key="app/src/main/res/layout/list_ltem_kakao_local.xml" value="0.26313405797101447" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.2947916666666667" />
         <entry key="app/src/main/res/menu/toolbar_menu.xml" value="0.2947916666666667" />

@@ -2,13 +2,11 @@ package com.example.myapplication.ui.create
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.Promise
 import com.example.myapplication.repository.CreateRepository
-import com.example.myapplication.utils.MyApplication
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

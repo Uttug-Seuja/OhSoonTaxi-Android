@@ -10,13 +10,11 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,10 +24,8 @@ import com.example.myapplication.adapter.KakaoLocalAdapter
 import com.example.myapplication.data.ModelKakaoLocal
 import com.example.myapplication.data.ResultSearchKeyword
 import com.example.myapplication.databinding.ActivityCreateBinding
-import com.example.myapplication.databinding.ActivityDetailBinding
 import com.example.myapplication.network.KakaoLocalInterface
-import com.example.myapplication.ui.detail.DetailViewModel
-import com.example.myapplication.utils.textChangesToFlow
+import com.example.myapplication.common.utils.textChangesToFlow
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.debounce
@@ -47,6 +43,7 @@ import kotlin.coroutines.CoroutineContext
 class CreateActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityCreateBinding.inflate(layoutInflater) }
+
     private val viewModel by lazy {
         ViewModelProvider(
             this,
@@ -136,21 +133,13 @@ class CreateActivity : AppCompatActivity() {
         // 리스트 아이템 클릭 시 해당 위치로 이동
         listAdapter.setItemClickListener(object : KakaoLocalAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int, itemList: ArrayList<ModelKakaoLocal>) {
-//                val mapPoint = MapPoint.mapPointWithGeoCoord(listItems[position].y, listItems[position].x)
-//                binding.mapView.setMapCenterPointAndZoomLevel(mapPoint, 1, true)
-
 
                 if (binding.editStartPlace.isFocused) {
                     binding.rvStartPlaceList.visibility = View.GONE
                     binding.editStartPlace.clearFocus()
                     binding.editStartPlace.setText(itemList[position].name)
-                    Log.d("ttt22", binding.editStartPlace.isFocused.toString())
                     startPlaceX = itemList[position].x
                     startPlaceY = itemList[position].y
-
-                    Log.d("ttt", itemList[position].x.toString())
-                    Log.d("ttt", itemList[position].y.toString())
-
 
                 }
 
@@ -160,8 +149,6 @@ class CreateActivity : AppCompatActivity() {
                     binding.editDestination.setText(itemList[position].name)
                     destinationX = itemList[position].x
                     destinationY = itemList[position].y
-                    Log.d("ttt", itemList[position].x.toString())
-                    Log.d("ttt", itemList[position].y.toString())
                 }
                 imm.hideSoftInputFromWindow(this@CreateActivity.currentFocus?.windowToken, 0)
                 listItems.clear()
@@ -173,7 +160,6 @@ class CreateActivity : AppCompatActivity() {
         binding.editStartPlace.apply {
             this.hint = "어디서 탈래요?"
 
-            Log.d("ttt", "호잇?")
             // EditText 에 포커스가 갔을 때 ClearButton 활성화
             this.setOnFocusChangeListener { v, hasFocus ->
                 flag = !hasFocus
@@ -196,8 +182,6 @@ class CreateActivity : AppCompatActivity() {
                         it?.length!! >= 0 && !flag
                     }
                     .onEach {
-                        Log.d(ContentValues.TAG, "flow로 받는다 $it")
-
                         // 해당 검색어로 api 호출
                         keyword = it.toString()
                         pageNumber = 1
@@ -213,8 +197,6 @@ class CreateActivity : AppCompatActivity() {
 
         binding.editDestination.apply {
             this.hint = "어디로 갈까요?"
-
-            Log.d("ttt", "호잇?")
             // EditText 에 포커스가 갔을 때 ClearButton 활성화
             this.setOnFocusChangeListener { v, hasFocus ->
                 flag = !hasFocus
@@ -451,23 +433,14 @@ class CreateActivity : AppCompatActivity() {
             }
         }
 
-    private val seatForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            when (result.resultCode) {
-                RESULT_OK -> {
-                    binding.seatText.text = result.data!!.getStringExtra("seatType")
-                }
-            }
-        }
-
     // 키워드 검색 함수
     private fun searchKeyword(keyword: String, page: Int, type: Int) {
         val retrofit = Retrofit.Builder()          // Retrofit 구성
-            .baseUrl(CreateFragment.BASE_URL)
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val api = retrofit.create(KakaoLocalInterface::class.java)            // 통신 인터페이스를 객체로 생성
-        val call = api.getSearchKeyword(CreateFragment.API_KEY, keyword, page)    // 검색 조건 입력
+        val call = api.getSearchKeyword(API_KEY, keyword, page)    // 검색 조건 입력
 
         // API 서버에 요청
         call.enqueue(object : Callback<ResultSearchKeyword> {
@@ -499,13 +472,9 @@ class CreateActivity : AppCompatActivity() {
             } else {
                 binding.rvDestinationList.visibility = View.VISIBLE
             }
-//            binding.rvStartPlaceList.visibility = View.VISIBLE
-//            binding.noResultCard.visibility = View.GONE
 
             // 검색 결과 있음
             listItems.clear()                   // 리스트 초기화
-//            binding.mapView.removeAllPOIItems() // 지도의 마커 모두 제거
-//            addMyPmdMarker() // My PMD 마커 추가
 
             for (document in searchResult!!.documents) {
 
@@ -518,19 +487,6 @@ class CreateActivity : AppCompatActivity() {
                     document.y.toDouble()
                 )
                 listItems.add(item)
-
-                // 지도에 마커 추가
-//                val point = MapPOIItem()
-//                point.apply {
-//                    itemName = document.place_name // 마커 이름
-//                    mapPoint = MapPoint.mapPointWithGeoCoord( // 좌표
-//                        document.y.toDouble(),
-//                        document.x.toDouble()
-//                    )
-//                    markerType = MapPOIItem.MarkerType.BluePin // 마커 모양
-//                    selectedMarkerType = MapPOIItem.MarkerType.RedPin // 클릭 시 마커 모양
-//                }
-//                binding.mapView.addPOIItem(point)
             }
             listAdapter.notifyDataSetChanged()
 
@@ -539,8 +495,6 @@ class CreateActivity : AppCompatActivity() {
             // 검색 결과 없음
             binding.rvStartPlaceList.visibility = View.GONE
             binding.rvDestinationList.visibility = View.GONE
-
-//            binding.noResultCard.visibility = View.VISIBLE
 
         }
     }

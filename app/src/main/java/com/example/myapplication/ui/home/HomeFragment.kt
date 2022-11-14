@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.home
 
+import android.app.Application
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
@@ -17,6 +18,8 @@ import com.example.myapplication.data.CalendarDateModel
 import com.example.myapplication.databinding.FragmentHomeBinding
 import com.example.myapplication.ui.detail.DetailActivity
 import com.example.myapplication.ui.search.SearchActivity
+import com.example.myapplication.ui.search.SearchViewModel
+import com.example.myapplication.ui.signup.SignupViewModel
 import com.junjange.soondong.utils.HorizontalItemDecoration
 import java.text.SimpleDateFormat
 import java.util.*
@@ -27,7 +30,8 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    lateinit var viewModel: HomeViewModel
+    private val viewModel by lazy { ViewModelProvider(this, HomeViewModel.Factory(application = Application()))[HomeViewModel::class.java] }
+
     private val sdf = SimpleDateFormat("yyyy년 MMMM", Locale.KOREA)
     private val cal = Calendar.getInstance(Locale.KOREA)
     private val sdfRv = SimpleDateFormat("yyyy-MM-dd", Locale.KOREA)
@@ -66,9 +70,10 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
 
 
         _binding = FragmentHomeBinding.inflate(themedInflater, container, false)
+        binding.viewModel = viewModel
 
 //        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+//        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         setUpDateAdapter()
         setUpDateClickListener()
@@ -174,25 +179,6 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
         calendarAdapter.setData(calendarList)
     }
 
-    // 클릭 리스너
-//    override fun onItemClickListener(item: CalendarDateModel, position: Int) {
-//        calendarDateList.forEachIndexed { index, calendarModel ->
-//            if(index == position){
-//                calendarModel.isSelected = true
-//                viewModel.retrofitReservesInfoRetrofit(sportType, sdfRv.format(calendarModel.data).toString())
-//
-//            }else{
-//                calendarModel.isSelected = false
-//            }
-//        }
-//        calendarAdapter.setData(calendarDateList)
-//
-//    }
-//
-//    override fun onItemClickListener(item: Match, position: Int) {
-//        TODO("Not yet implemented")
-//    }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
@@ -203,7 +189,22 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
     }
 
     override fun onItemClickListener(item: CalendarDateModel, position: Int) {
-        TODO("Not yet implemented")
+
+        calendarDateList.forEachIndexed { index, calendarModel ->
+
+
+//            calendarModel.isSelected = index == position
+            if(index == position){
+                calendarModel.isSelected = true
+//                viewModel.retrofitReservesInfoRetrofit(sportType, sdfRv.format(calendarModel.data).toString())
+
+            }else{
+                calendarModel.isSelected = false
+            }
+
+        }
+        calendarAdapter.setData(calendarDateList)
+
     }
 
 }

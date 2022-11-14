@@ -19,7 +19,7 @@
     <item
         android:id="@+id/navigation_my_info"
         android:icon="@drawable/ic_baseline_person_24"
-        android:title="내 정보" />
+        android:title="나의 순택" />
 
 
 </menu>

@@ -3,17 +3,19 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="viewModel"
-            type="com.example.myapplication.ui.notifications.NotificationsViewModel" />
+            type="com.example.myapplication.ui.my_info.my_create.MyCreateViewModel" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.view.SearchActivity"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:context=".ui.view.SearchActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/mainToolbar"
@@ -28,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center_horizontal"
-                android:text="알림"
+                android:text="작성내역"
                 android:textColor="@color/black"
                 android:textSize="18dp"
                 android:textStyle="bold" />
@@ -38,20 +40,27 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1.5dp"
+            android:layout_height="15dp"
             android:background="#eeeeee" />
 
 
-
-
-        <TextView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="아직 알림이 없습니다."
+            android:layout_marginBottom="30dp"
+            android:visibility="visible"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <TextView
+            android:id="@+id/noResultCard"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
             android:background="#ffffff"
+            android:gravity="center"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:text="검색 결과가 없습니다."
+            android:visibility="gone">
 
 
         </TextView>

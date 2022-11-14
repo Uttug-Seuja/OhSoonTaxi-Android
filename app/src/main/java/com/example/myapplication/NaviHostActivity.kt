@@ -7,12 +7,9 @@ import android.os.Bundle
 //import android.support.v4.app.ActivityCompat
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import com.example.myapplication.databinding.ActivityNaviHostBinding
 import com.example.myapplication.ui.create.CreateActivity
-import com.example.myapplication.ui.create.CreateFragment
-import com.example.myapplication.ui.detail.DetailActivity
 import com.example.myapplication.ui.home.HomeFragment
 import com.example.myapplication.ui.my_info.MyInfoFragment
 import com.example.myapplication.ui.notifications.NotificationsFragment
@@ -21,7 +18,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class NaviHostActivity : AppCompatActivity() {
 
     private lateinit var homeFragment: HomeFragment
-    private lateinit var createFragment: CreateFragment
     private lateinit var notificationsFragment: NotificationsFragment
     private lateinit var myInfoFragment: MyInfoFragment
 
