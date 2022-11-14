@@ -1,36 +1,41 @@
 package com.example.myapplication.ui.home
 
 import android.app.Application
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.example.myapplication.R
 import com.example.myapplication.adapter.CalendarAdapter
+import com.example.myapplication.adapter.MatchAdapter
 import com.example.myapplication.data.CalendarDateModel
 import com.example.myapplication.databinding.FragmentHomeBinding
 import com.example.myapplication.ui.detail.DetailActivity
 import com.example.myapplication.ui.search.SearchActivity
-import com.example.myapplication.ui.search.SearchViewModel
-import com.example.myapplication.ui.signup.SignupViewModel
+import com.example.myapplication.ui.signin.SigninActivity
+import com.example.myapplication.ui.signup.SignupNavigationAction
 import com.junjange.soondong.utils.HorizontalItemDecoration
 import java.text.SimpleDateFormat
 import java.util.*
-import com.kakao.util.maps.helper.Utility
 
 
-class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
+class HomeFragment : Fragment(), CalendarAdapter.ItemClickListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by lazy { ViewModelProvider(this, HomeViewModel.Factory(application = Application()))[HomeViewModel::class.java] }
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this,
+            HomeViewModel.Factory(application = Application())
+        )[HomeViewModel::class.java]
+    }
 
     private val sdf = SimpleDateFormat("yyyy년 MMMM", Locale.KOREA)
     private val cal = Calendar.getInstance(Locale.KOREA)
@@ -38,6 +43,7 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
     private val currentDate = Calendar.getInstance(Locale.KOREA)
     private val dates = ArrayList<Date>()
     private lateinit var calendarAdapter: CalendarAdapter
+    private lateinit var matchAdapter: MatchAdapter
     private val calendarDateList = ArrayList<CalendarDateModel>()
 
     fun newInstance(): HomeFragment {
@@ -46,19 +52,10 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
 
     override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater {
         val inflater = super.onGetLayoutInflater(savedInstanceState)
-        val contextThemeWrapper: Context = ContextThemeWrapper(requireContext(), R.style.Theme_home_OhSoonTaxiAndroid)
+        val contextThemeWrapper: Context =
+            ContextThemeWrapper(requireContext(), R.style.Theme_home_OhSoonTaxiAndroid)
         return inflater.cloneInContext(contextThemeWrapper)
     }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d("ttt", "onCreate 실행")
-
-        var keyHash = Utility.getKeyHash(activity)
-        Log.v(TAG, keyHash)
-
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -66,45 +63,72 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
     ): View? {
 
         val themedInflater =
-            inflater.cloneInContext(ContextThemeWrapper(requireActivity(), R.style.Theme_home_OhSoonTaxiAndroid))
+            inflater.cloneInContext(
+                ContextThemeWrapper(
+                    requireActivity(),
+                    R.style.Theme_home_OhSoonTaxiAndroid
+                )
+            )
 
 
         _binding = FragmentHomeBinding.inflate(themedInflater, container, false)
-        binding.viewModel = viewModel
-
-//        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-//        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        binding.viewmodel = viewModel
 
         setUpDateAdapter()
         setUpDateClickListener()
+        setMatchView()
+        setObserver()
         setUpCalendar(currentDate.get(Calendar.DATE) - 1)
         binding.recyclerView.scrollToPosition(currentDate.get(Calendar.DATE) - 1)
 
-        binding.searchViewLayout.setOnClickListener {
-            val intent = Intent(activity, DetailActivity::class.java)
-            startActivity(intent)
+        lifecycleScope.launchWhenStarted {
+            viewModel.toastMessage.collect { message ->
+                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.navigationEvent.collect {
+                when (it) {
+                    is HomeNavigationAction.NavigateToSearch -> {
+                        val intent = Intent(activity, SearchActivity::class.java)
+                        startActivity(intent)
+                    }
+                }
+            }
         }
 
         return binding.root
 
-
     }
 
-//    private fun setMatchView(){
-//        matchAdapter =  MatchAdapter(this,this).apply {
-//            setHasStableIds(true) // 리사이클러 뷰 업데이트 시 깜빡임 방지
-//        }
-//        binding.rvMatch.adapter = matchAdapter
-//    }
+    private fun setMatchView() {
+        matchAdapter = MatchAdapter(requireActivity()).apply {
+            setHasStableIds(true) // 리사이클러 뷰 업데이트 시 깜빡임 방지
+        }
+        binding.rvMatch.adapter = matchAdapter
+    }
 
-//    private fun setObserver() {
-//        viewModel.retrofitReservesInfoRetrofit(sportType, sdfRv.format(cal.time).toString())
-//        viewModel.reservesSportDateText.observe(this){
-//            viewModel.reservesSportDateText.value.let {
-//                matchAdapter.setData(it!!.reservesSportDateData)
-//            }
-//        }
-//    }
+    private fun setObserver() {
+        viewModel.reservesSportDateRetrofit("SOCCER", sdfRv.format(cal.time).toString())
+        Log.d("Ttt", "???")
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.reservesSportDateEvent.collect {
+                Log.d("Ttt", it.reservesSportDateData.toString())
+                if (it.reservesSportDateData.isEmpty()){
+                    binding.rvMatch.visibility = View.GONE
+                    binding.noResultCard.visibility = View.VISIBLE
+                }else{
+                    matchAdapter.setData(it.reservesSportDateData)
+                    binding.rvMatch.visibility = View.VISIBLE
+                    binding.noResultCard.visibility = View.GONE
+
+                }
+
+            }
+        }
+    }
 
     /**
      * 클릭 리스너 설정
@@ -113,11 +137,11 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
         binding.ivCalendarNext.setOnClickListener {
             cal.add(Calendar.MONTH, 1)
             if (cal == currentDate) {
-                setUpCalendar(currentDate.get(Calendar.DATE) -1)
+                setUpCalendar(currentDate.get(Calendar.DATE) - 1)
                 binding.recyclerView.scrollToPosition(currentDate.get(Calendar.DATE) - 1 + 4)
                 Log.d("ttt", currentDate.get(Calendar.DATE).toString())
 
-            }else{
+            } else {
                 setUpCalendar(0)
                 binding.recyclerView.scrollToPosition(0)
 
@@ -127,10 +151,10 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
             cal.add(Calendar.MONTH, -1)
 
             if (cal == currentDate) {
-                setUpCalendar(currentDate.get(Calendar.DATE) -1 )
+                setUpCalendar(currentDate.get(Calendar.DATE) - 1)
                 binding.recyclerView.scrollToPosition(currentDate.get(Calendar.DATE) - 1 + 4)
 
-            }else{
+            } else {
                 setUpCalendar(0)
                 binding.recyclerView.scrollToPosition(0)
 
@@ -147,7 +171,7 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
         val snapHelper: SnapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(binding.recyclerView)
 
-        calendarAdapter =  CalendarAdapter(this).apply {
+        calendarAdapter = CalendarAdapter(this).apply {
             setHasStableIds(true) // 리사이클러 뷰 업데이트 시 깜빡임 방지
         }
 
@@ -157,7 +181,7 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
     /**
      * 매월 달력을 설정하는 기능
      */
-    private fun setUpCalendar(toDay : Int) {
+    private fun setUpCalendar(toDay: Int) {
         val calendarList = ArrayList<CalendarDateModel>()
         binding.tvDateMonth.text = sdf.format(cal.time)
 
@@ -181,8 +205,8 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            android.R.id.home->{ // 메뉴 버튼
+        when (item.itemId) {
+            android.R.id.home -> { // 메뉴 버튼
             }
         }
         return super.onOptionsItemSelected(item)
@@ -193,12 +217,15 @@ class HomeFragment : Fragment(),  CalendarAdapter.ItemClickListener{
         calendarDateList.forEachIndexed { index, calendarModel ->
 
 
-//            calendarModel.isSelected = index == position
-            if(index == position){
+            calendarModel.isSelected = index == position
+            if (index == position) {
                 calendarModel.isSelected = true
-//                viewModel.retrofitReservesInfoRetrofit(sportType, sdfRv.format(calendarModel.data).toString())
+                viewModel.reservesSportDateRetrofit(
+                    "SOCCER",
+                    sdfRv.format(calendarModel.data).toString()
+                )
 
-            }else{
+            } else {
                 calendarModel.isSelected = false
             }
 

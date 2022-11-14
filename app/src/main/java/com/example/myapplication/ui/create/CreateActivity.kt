@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,8 +16,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.BuildConfig
 import com.example.myapplication.R
@@ -26,6 +29,8 @@ import com.example.myapplication.data.ResultSearchKeyword
 import com.example.myapplication.databinding.ActivityCreateBinding
 import com.example.myapplication.network.KakaoLocalInterface
 import com.example.myapplication.common.utils.textChangesToFlow
+import com.example.myapplication.ui.home.HomeNavigationAction
+import com.example.myapplication.ui.search.SearchActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.debounce
@@ -116,6 +121,23 @@ class CreateActivity : AppCompatActivity() {
 
 
         setOnClickListener()
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.toastMessage.collect { message ->
+                Toast.makeText(this@CreateActivity, message, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.navigationEvent.collect {
+                when (it) {
+                    is CreateNavigationAction.NavigateToHome -> {
+                        finish()
+                    }
+                }
+            }
+        }
+
 
         // 키보드 설정
         val imm =

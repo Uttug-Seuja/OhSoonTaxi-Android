@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.myapplication.NaviHostActivity" />
+            type="com.example.myapplication.NavHostActivity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

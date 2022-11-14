@@ -2,9 +2,12 @@ package com.example.myapplication.ui.update
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.myapplication.R
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.databinding.ActivityUpdateBinding
+import com.example.myapplication.ui.create.CreateNavigationAction
 
 class UpdateActivity : AppCompatActivity() {
 
@@ -29,6 +32,21 @@ class UpdateActivity : AppCompatActivity() {
 
 
         setOnClickListener()
+        lifecycleScope.launchWhenStarted {
+            viewModel.toastMessage.collect { message ->
+                Toast.makeText(this@UpdateActivity, message, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.navigationEvent.collect {
+                when (it) {
+                    is UpdateNavigationAction.NavigateToDetail -> {
+                        finish()
+                    }
+                }
+            }
+        }
 
     }
 

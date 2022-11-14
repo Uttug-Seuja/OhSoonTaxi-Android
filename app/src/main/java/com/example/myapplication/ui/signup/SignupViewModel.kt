@@ -1,35 +1,67 @@
 package com.example.myapplication.ui.signup
 
 import android.app.Application
-import androidx.lifecycle.MutableLiveData
+import android.database.sqlite.SQLiteException
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.myapplication.common.base.BaseViewModel
 import com.example.myapplication.data.User
+import com.example.myapplication.network.onError
+import com.example.myapplication.network.onSuccess
 import com.example.myapplication.repository.UserRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
-class SignupViewModel(private val repository: UserRepository) : ViewModel(){
-    private val _retrofitSignUpText = MutableLiveData<Boolean>()
+class SignupViewModel(private val repository: UserRepository) : BaseViewModel() {
+
+    private val _navigationEvent: MutableSharedFlow<SignupNavigationAction> = MutableSharedFlow()
+    val navigationEvent: SharedFlow<SignupNavigationAction> = _navigationEvent
+
+    var userIdEvent : MutableStateFlow<String> = MutableStateFlow<String>("")
+    var userPasswordEvent :MutableStateFlow<String> = MutableStateFlow<String>("")
+    var userNameEvent : MutableStateFlow<String> = MutableStateFlow<String>("")
+    var userStudentIdEvent : MutableStateFlow<String> = MutableStateFlow<String>("")
+    var userGenderEvent : MutableStateFlow<String> = MutableStateFlow<String>("")
+    var userPhoneNumberEvent : MutableStateFlow<String> = MutableStateFlow<String>("")
+
+    fun signUpRetrofit() = viewModelScope.launch {
+        if (userIdEvent.value.isNotEmpty() && userPasswordEvent.value.isNotEmpty() && userNameEvent.value.isNotEmpty()
+            && userStudentIdEvent.value.isNotEmpty() && userGenderEvent.value.isNotEmpty() && userPhoneNumberEvent.value.isNotEmpty()) {
+            val signup = User(userIdEvent.value, userPasswordEvent.value, userNameEvent.value, userStudentIdEvent.value,
+                userGenderEvent.value, userPhoneNumberEvent.value)
+
+            baseViewModelScope.launch {
+                repository.retrofitSignUp(signup)
+                    .onSuccess {
+                        _navigationEvent.emit(SignupNavigationAction.NavigateToSignIn)
+                    }
+                    .onError { e ->
+                        Log.d("ttt", e.toString())
+                        when (e) {
+                            is SQLiteException -> _toastMessage.emit("데이터 베이스 에러가 발생하였습니다.")
+                            else -> _toastMessage.emit("시스템 에러가 발생 하였습니다.")
+                        }
+                    }
+            }
 
 
-    val retrofitSignUpText: MutableLiveData<Boolean>
-        get() = _retrofitSignUpText
-
-
-    fun signUpRetrofit(user : User) = viewModelScope.launch{
-//        _retrofitSignUpText.value = repository.retrofitSignUp(user)
-
+        }else{
+            baseViewModelScope.launch {
+                _toastMessage.emit("빈 곳 없이 작성해주세요")
+            }
+        }
     }
 
-
     // factory pattern
-
     class Factory(val application: Application) : ViewModelProvider.Factory {
+
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return SignupViewModel(UserRepository.getInstance(application)!!) as T
         }
     }
-
 
 }

@@ -52,7 +52,7 @@
             android:name=".ui.signup.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".NaviHostActivity"
+            android:name=".NavHostActivity"
             android:exported="true" />
         <activity
             android:name=".ui.detail.DetailActivity"

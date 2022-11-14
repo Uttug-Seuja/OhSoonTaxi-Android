@@ -6,7 +6,7 @@
 
     <data>
         <variable
-            name="viewModel"
+            name="viewmodel"
             type="com.example.myapplication.ui.signup.SignupViewModel" />
     </data>
 
@@ -78,6 +78,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:autoSizeMinTextSize="18dp"
+                        android:text="@={viewmodel.userIdEvent}"
                         android:backgroundTint="@color/white"
                         android:hint="아이디"
                         android:letterSpacing="0"
@@ -110,6 +111,7 @@
                         android:layout_height="wrap_content"
                         android:autoSizeMinTextSize="18dp"
                         android:backgroundTint="@color/white"
+                        android:text="@={viewmodel.userPasswordEvent}"
                         android:hint="비밀번호"
                         android:letterSpacing="0"
                         android:lineSpacingExtra="-12sp"
@@ -142,6 +144,7 @@
                         android:autoSizeMinTextSize="18dp"
                         android:backgroundTint="@color/white"
                         android:hint="이름"
+                        android:text="@={viewmodel.userNameEvent}"
                         android:letterSpacing="0"
                         android:lineSpacingExtra="-12sp"
                         android:textSize="18sp"
@@ -170,6 +173,7 @@
                         android:backgroundTint="@color/white"
                         android:maxLength="8"
                         android:hint="학번"
+                        android:text="@={viewmodel.userStudentIdEvent}"
                         android:inputType="number"
                         android:letterSpacing="0"
                         android:lineSpacingExtra="-12sp"
@@ -201,6 +205,7 @@
                         android:backgroundTint="@color/white"
                         android:maxLength="11"
                         android:hint="전화번호"
+                        android:text="@={viewmodel.userPhoneNumberEvent}"
                         android:inputType="number"
                         android:letterSpacing="0"
                         android:lineSpacingExtra="-12sp"
@@ -323,6 +328,7 @@
             android:layout_marginEnd="20dp"
             android:backgroundTint="@color/drawer_background"
             app:cardCornerRadius="15dp"
+            app:onSingleClick="@{() -> viewmodel.signUpRetrofit()}"
             android:layout_marginBottom="28dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -15,7 +15,7 @@ import com.example.myapplication.databinding.ItemRecyclerPromiseBinding
 import com.example.myapplication.ui.detail.DetailActivity
 import kotlin.collections.ArrayList
 
-class MatchAdapter (val onClickListener: ItemClickListener, val context: Context) : RecyclerView.Adapter<MatchAdapter.ViewHolder>() {
+class MatchAdapter (val context: Context) : RecyclerView.Adapter<MatchAdapter.ViewHolder>() {
     private var items = ArrayList<ReservesSportDateData>()
 //    private val gender = arrayListOf<String>("남녀모두", "남자만", "여자만")
     private val gender = hashMapOf<String, String>("ALL" to "남녀모두", "MAN" to "남자만", "WOMAN" to "여자만" )
@@ -24,14 +24,6 @@ class MatchAdapter (val onClickListener: ItemClickListener, val context: Context
     private val stateTextColor = hashMapOf<String, String>("POSSIBLE" to "#FFFFFF" , "IMMINENT" to "#FFFFFF",  "DEADLINE" to "#cccccc" )
     private val stateBtnColor = hashMapOf<String, String>("POSSIBLE" to "#1570ff" , "IMMINENT" to "#FF4D37",  "DEADLINE" to "#EEEEEE" )
 
-
-
-    interface ItemClickListener {
-        fun onItemClickListener(
-            item: Match,
-            position: Int,
-        )
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemRecyclerPromiseBinding.inflate(LayoutInflater.from(parent.context), parent, false)

@@ -4,29 +4,28 @@ import android.Manifest
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-//import android.support.v4.app.ActivityCompat
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.example.myapplication.databinding.ActivityNaviHostBinding
+import com.example.myapplication.databinding.ActivityNavhostBinding
 import com.example.myapplication.ui.create.CreateActivity
 import com.example.myapplication.ui.home.HomeFragment
 import com.example.myapplication.ui.my_info.MyInfoFragment
 import com.example.myapplication.ui.notifications.NotificationsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class NaviHostActivity : AppCompatActivity() {
+class NavHostActivity : AppCompatActivity() {
 
     private lateinit var homeFragment: HomeFragment
     private lateinit var notificationsFragment: NotificationsFragment
     private lateinit var myInfoFragment: MyInfoFragment
 
 
-    private lateinit var binding: ActivityNaviHostBinding
+    private lateinit var binding: ActivityNavhostBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityNaviHostBinding.inflate(layoutInflater)
+        binding = ActivityNavhostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // 바텀네비게이션 변수 실행
@@ -44,7 +43,7 @@ class NaviHostActivity : AppCompatActivity() {
         )
 
         // 권한 요청
-        ActivityCompat.requestPermissions(this@NaviHostActivity, permissionList, 1)
+        ActivityCompat.requestPermissions(this@NavHostActivity, permissionList, 1)
 
     }
 

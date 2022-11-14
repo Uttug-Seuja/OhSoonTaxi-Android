@@ -61,6 +61,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:ems="10"
+                android:text="@={viewmodel.titleEvent}"
                 android:hint="제목을 입력해주세요"
                 android:textColor="#5C5C5C"
                 android:textSize="16sp"

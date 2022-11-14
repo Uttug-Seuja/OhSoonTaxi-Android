@@ -2,6 +2,10 @@ package com.example.myapplication.repository
 
 import android.app.Application
 import android.util.Log
+import com.example.myapplication.data.ReservesSportDate
+import com.example.myapplication.network.BaseResult
+import com.example.myapplication.network.RetrofitObject
+import com.example.myapplication.network.handleResult
 
 
 class HomeRepository (application : Application) {
@@ -17,18 +21,10 @@ class HomeRepository (application : Application) {
         }
     }
 
-    // Use Retrofit
-    suspend fun retrofitReservesSportDate(sport: String, today: String) {
-//        val response = RetrofitObject.getRetrofitService.getReservesSportDate(sport, today)
-        Log.d("ttt", today.toString())
+    suspend fun retrofitReservesSportDate(sport: String, today: String): BaseResult<ReservesSportDate> {
 
-        Log.d("ttt", "tttt")
-
-
-//        return if (response.isSuccessful) response.body() as ReservesSportDate else ReservesSportDate(ArrayList())
-
+        return handleResult{ RetrofitObject.getRetrofitService.getReservesSportDate(sport, today)}
     }
-
 
 
 }
