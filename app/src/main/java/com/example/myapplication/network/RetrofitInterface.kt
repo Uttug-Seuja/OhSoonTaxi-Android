@@ -1,18 +1,12 @@
 package com.example.myapplication.network
 
 import com.example.myapplication.common.utils.API
-import com.example.myapplication.data.Login
-import com.example.myapplication.data.ReservesEdit
-import com.example.myapplication.data.ReservesSportDate
-import com.example.myapplication.data.User
-import com.example.myapplication.repository.ReservesCreation
-import com.google.gson.JsonObject
+import com.example.myapplication.data.*
+import com.example.myapplication.data.ReservesCreation
 import retrofit2.Response
 import retrofit2.http.*
 import retrofit2.http.Body
 import retrofit2.http.POST
-
-
 
 
 interface RetrofitInterface {
@@ -20,8 +14,8 @@ interface RetrofitInterface {
     @Headers("Content-Type: application/json")
     @GET(API.GET_RESERVES_SPORT_DATE)
     suspend fun getReservesSportDate(
-        @Query("sport") sport : String,
-        @Query("day") day : String,
+        @Query("sport") sport: String,
+        @Query("day") day: String,
 
 
         ): ReservesSportDate
@@ -31,7 +25,7 @@ interface RetrofitInterface {
     @POST(API.POST_USERS_CREATION)
     suspend fun postUsersCreation(
         @Body user: User,
-    ): Unit
+    )
 
 
     // 로그인
@@ -39,7 +33,7 @@ interface RetrofitInterface {
     @POST(API.POST_USERS_LOGIN)
     suspend fun postUsersLogin(
         @Body login: Login,
-    ): Unit
+    )
 
 
     // 경기 생성
@@ -47,14 +41,53 @@ interface RetrofitInterface {
     @POST(API.POST_RESERVES_CREATION)
     suspend fun postReservesCreation(
         @Body reservesCreation: ReservesCreation,
-    ): Unit
+    )
 
     // 경기 수정
     @Headers("Content-Type: application/json")
     @POST(API.POST_RESERVES_EDIT)
     suspend fun postReservesEdit(
         @Body reservesEdit: ReservesEdit,
-    ): Unit
+    )
+
+
+    // 경기 삭제
+    @Headers("Content-Type: application/json")
+    @DELETE(API.DELETE_RESERVES)
+    suspend fun deleteReserves(
+        @Path("reserveId") reserveId: Int,
+
+        )
+
+    // 경기 세부 정보 제공
+    @Headers("Content-Type: application/json")
+    @GET(API.GET_RESERVES_Info)
+    suspend fun getReservesInfo(
+        @Path("reserveId") reserveId : Int,
+
+
+        ): ReservesInfo
+
+    // 참가 신청
+    @Headers("Content-Type: application/json")
+    @POST(API.POST_PARTICIPATION)
+    suspend fun postParticipation(
+        @Body participation: Participation,
+    )
+
+    // 참가 취소
+    @Headers("Content-Type: application/json")
+    @HTTP(method = "DELETE", path = API.DELETE_PARTICIPATION, hasBody = true)
+    suspend fun deleteParticipation(
+        @Body participation: Participation,
+    )
+
+    // 해시태그 이름 검색
+    @GET("ASdasd")
+    suspend fun getHashtagName(
+        @Path("keyword") keyword : String
+    ): Hashtag
+
 
 
 }

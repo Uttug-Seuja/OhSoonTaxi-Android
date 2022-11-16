@@ -1,5 +1,6 @@
 package com.example.myapplication.ui.home
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
@@ -7,6 +8,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -16,17 +19,16 @@ import com.example.myapplication.R
 import com.example.myapplication.adapter.CalendarAdapter
 import com.example.myapplication.adapter.MatchAdapter
 import com.example.myapplication.data.CalendarDateModel
+import com.example.myapplication.data.ReservesSportDateData
 import com.example.myapplication.databinding.FragmentHomeBinding
 import com.example.myapplication.ui.detail.DetailActivity
 import com.example.myapplication.ui.search.SearchActivity
-import com.example.myapplication.ui.signin.SigninActivity
-import com.example.myapplication.ui.signup.SignupNavigationAction
 import com.junjange.soondong.utils.HorizontalItemDecoration
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class HomeFragment : Fragment(), CalendarAdapter.ItemClickListener {
+class HomeFragment : Fragment(), CalendarAdapter.ItemClickListener, MatchAdapter.ItemClickListener {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -45,6 +47,7 @@ class HomeFragment : Fragment(), CalendarAdapter.ItemClickListener {
     private lateinit var calendarAdapter: CalendarAdapter
     private lateinit var matchAdapter: MatchAdapter
     private val calendarDateList = ArrayList<CalendarDateModel>()
+
 
     fun newInstance(): HomeFragment {
         return HomeFragment()
@@ -98,28 +101,32 @@ class HomeFragment : Fragment(), CalendarAdapter.ItemClickListener {
             }
         }
 
+
         return binding.root
 
     }
 
+
     private fun setMatchView() {
-        matchAdapter = MatchAdapter(requireActivity()).apply {
+        matchAdapter = MatchAdapter(this, requireActivity()).apply {
             setHasStableIds(true) // 리사이클러 뷰 업데이트 시 깜빡임 방지
         }
         binding.rvMatch.adapter = matchAdapter
     }
 
     private fun setObserver() {
+        Log.d("ttt123", sdfRv.format(cal.time))
+
         viewModel.reservesSportDateRetrofit("SOCCER", sdfRv.format(cal.time).toString())
         Log.d("Ttt", "???")
 
         lifecycleScope.launchWhenStarted {
             viewModel.reservesSportDateEvent.collect {
                 Log.d("Ttt", it.reservesSportDateData.toString())
-                if (it.reservesSportDateData.isEmpty()){
+                if (it.reservesSportDateData.isEmpty()) {
                     binding.rvMatch.visibility = View.GONE
                     binding.noResultCard.visibility = View.VISIBLE
-                }else{
+                } else {
                     matchAdapter.setData(it.reservesSportDateData)
                     binding.rvMatch.visibility = View.VISIBLE
                     binding.noResultCard.visibility = View.GONE
@@ -231,6 +238,30 @@ class HomeFragment : Fragment(), CalendarAdapter.ItemClickListener {
 
         }
         calendarAdapter.setData(calendarDateList)
+
+    }
+
+    private val registerForActivityResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val id = result.data?.getStringExtra("id") ?: ""
+                val password = result.data?.getStringExtra("password") ?: ""
+                viewModel.reservesSportDateRetrofit("SOCCER", id)
+
+                Log.d("ttt", id)
+                Log.d("ttt", password)
+
+            }
+        }
+
+    override fun onItemClickListener(item: ReservesSportDateData, position: Int) {
+
+        // 원하는 화면 연결
+        val intent = Intent(requireActivity(), DetailActivity::class.java)
+        intent.putExtra("reserveId", item.reserveId)
+        intent.putExtra("userId", item.userId)
+        registerForActivityResult.launch(intent)
+
 
     }
 

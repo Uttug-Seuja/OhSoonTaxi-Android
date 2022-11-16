@@ -1,4 +1,4 @@
-package com.example.myapplication.repository
+package com.example.myapplication.data
 
 
 data class ReservesCreation(

@@ -1,13 +1,17 @@
 package com.example.myapplication.ui.update
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.Toast
 import com.example.myapplication.R
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.myapplication.NavHostActivity
 import com.example.myapplication.databinding.ActivityUpdateBinding
 import com.example.myapplication.ui.create.CreateNavigationAction
+import com.example.myapplication.ui.detail.DetailActivity
 
 class UpdateActivity : AppCompatActivity() {
 
@@ -42,6 +46,10 @@ class UpdateActivity : AppCompatActivity() {
             viewModel.navigationEvent.collect {
                 when (it) {
                     is UpdateNavigationAction.NavigateToDetail -> {
+                        val intent = Intent(this@UpdateActivity, DetailActivity::class.java)
+                        intent.putExtra("id", "2022-12-06")
+                        intent.putExtra("password", "이건희")
+                        setResult(RESULT_OK, intent)
                         finish()
                     }
                 }
@@ -55,8 +63,15 @@ class UpdateActivity : AppCompatActivity() {
         binding.startBtn.setOnClickListener {
             viewModel.onCreatePromiseClicked()
         }
+    }
 
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> { // 메뉴 버튼
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }

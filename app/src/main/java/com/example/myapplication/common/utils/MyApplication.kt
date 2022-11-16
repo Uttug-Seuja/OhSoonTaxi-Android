@@ -2,6 +2,7 @@ package com.example.myapplication.common.utils
 
 
 import android.app.Application
+import com.example.myapplication.common.base.DataStoreModule
 
 class MyApplication : Application(){
 

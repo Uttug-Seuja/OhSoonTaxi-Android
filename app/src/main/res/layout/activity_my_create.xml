@@ -7,7 +7,7 @@
     <data>
 
         <variable
-            name="viewModel"
+            name="viewmodel"
             type="com.example.myapplication.ui.my_info.my_create.MyCreateViewModel" />
     </data>
 
@@ -49,18 +49,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="30dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <TextView
             android:id="@+id/noResultCard"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="match_parent"
             android:background="#ffffff"
             android:gravity="center"
             android:orientation="vertical"
-            android:text="검색 결과가 없습니다."
-            android:visibility="gone">
+            android:text="아직 작성 내역이 없습니다"
+            android:visibility="visible">
 
 
         </TextView>

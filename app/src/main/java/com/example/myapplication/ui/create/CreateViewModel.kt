@@ -7,14 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.common.base.BaseViewModel
-import com.example.myapplication.data.Login
 import com.example.myapplication.data.Promise
 import com.example.myapplication.network.onError
 import com.example.myapplication.network.onSuccess
 import com.example.myapplication.repository.CreateRepository
-import com.example.myapplication.repository.ReservesCreation
-import com.example.myapplication.ui.home.HomeNavigationAction
-import com.example.myapplication.ui.signin.SignInNavigationAction
+import com.example.myapplication.data.ReservesCreation
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -70,7 +67,8 @@ class CreateViewModel(private val repository: CreateRepository) : BaseViewModel(
                 )
 
                 baseViewModelScope.launch {
-                    repository.retrofitReservesCreation(ReservesCreation(
+                    repository.retrofitReservesCreation(
+                        ReservesCreation(
                         userId = 0,
                         title ="12",
                         explanation = "123",
@@ -81,7 +79,8 @@ class CreateViewModel(private val repository: CreateRepository) : BaseViewModel(
                         reserveDate = "123",
                         place = "123",
                         gender = "123"
-                    ))
+                    )
+                    )
                         .onSuccess {
                             _navigationEvent.emit(CreateNavigationAction.NavigateToHome)
                         }

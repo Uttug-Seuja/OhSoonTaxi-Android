@@ -1,6 +1,7 @@
 package com.example.myapplication.ui.detail
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.location.Location
 import android.location.LocationManager
@@ -13,12 +14,18 @@ import android.view.View
 import android.view.View.OnTouchListener
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.example.myapplication.NavHostActivity
 import com.example.myapplication.R
 import com.example.myapplication.adapter.CustomBalloonAdapter
 import com.example.myapplication.adapter.MarkerEventListener
 import com.example.myapplication.databinding.ActivityDetailBinding
+import com.example.myapplication.ui.home.HomeNavigationAction
+import com.example.myapplication.ui.search.SearchActivity
+import com.example.myapplication.ui.update.UpdateActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -63,6 +70,27 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true) // 드로어를 꺼낼 홈 버튼 활성화
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_previous) // 홈버튼 이미지 변경
         supportActionBar?.setDisplayShowTitleEnabled(false) // 툴바에 타이틀 안보이게
+
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.toastMessage.collect { message ->
+                Toast.makeText(this@DetailActivity, message, Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.navigationEvent.collect {
+                when (it) {
+                    is DetailNavigationAction.NavigateToBackNav -> {
+                        val intent = Intent(this@DetailActivity, NavHostActivity::class.java)
+                        intent.putExtra("id", "2022-12-06")
+                        intent.putExtra("password", "이건희")
+                        setResult(RESULT_OK, intent)
+                        finish()
+                    }
+                }
+            }
+        }
 
 
         val customBalloonAdapter = CustomBalloonAdapter(layoutInflater)
@@ -305,6 +333,19 @@ class DetailActivity : AppCompatActivity() {
         return true
     }
 
+    private val registerForActivityResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val id = result.data?.getStringExtra("id") ?: ""
+                val password = result.data?.getStringExtra("password") ?: ""
+//                viewModel.reservesSportDateRetrofit("SOCCER", id)
+
+                Log.d("ttt Detail", id)
+                Log.d("ttt", password)
+
+            }
+        }
+
     //액션버튼 클릭 했을 때
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
@@ -320,7 +361,8 @@ class DetailActivity : AppCompatActivity() {
             }
 
             R.id.edit_btn -> {
-                Toast.makeText(this, "수정하기 페이지로 이동.", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this@DetailActivity, UpdateActivity::class.java)
+                registerForActivityResult.launch(intent)
 
             }
             R.id.delete_btn -> {
@@ -345,5 +387,14 @@ class DetailActivity : AppCompatActivity() {
         val ret = EARTH_R * acos(distance)
 
         return ret.roundToLong() // 미터 단위
+    }
+    override fun onBackPressed() {
+        val intent = Intent(this@DetailActivity, NavHostActivity::class.java)
+        intent.putExtra("id", "2022-12-06")
+        intent.putExtra("password", "이건희")
+        setResult(RESULT_OK, intent)
+        finish()
+        super.onBackPressed()
+
     }
 }

@@ -7,12 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.common.base.BaseViewModel
-import com.example.myapplication.data.Promise
 import com.example.myapplication.network.onError
 import com.example.myapplication.network.onSuccess
 import com.example.myapplication.repository.CreateRepository
-import com.example.myapplication.repository.ReservesCreation
-import com.example.myapplication.ui.create.CreateNavigationAction
+import com.example.myapplication.data.ReservesCreation
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow

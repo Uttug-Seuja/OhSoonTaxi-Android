@@ -1,13 +1,10 @@
 package com.example.myapplication.repository
 
 import android.app.Application
-import android.util.Log
 import com.example.myapplication.data.*
-import com.example.myapplication.mapper.toDomain
 import com.example.myapplication.network.BaseResult
 import com.example.myapplication.network.RetrofitObject
 import com.example.myapplication.network.handleResult
-import com.google.gson.annotations.SerializedName
 
 class CreateRepository(application: Application) {
 

@@ -1,5 +1,6 @@
 package com.example.myapplication.network
 
+import android.util.Log
 import com.example.myapplication.common.utils.API
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -13,6 +14,7 @@ object RetrofitObject {
             level = HttpLoggingInterceptor.Level.BODY
         })
         .addInterceptor {
+
             // Request
             val request = it.request()
                 .newBuilder()
@@ -21,6 +23,9 @@ object RetrofitObject {
 
             // Response
             val response = it.proceed(request)
+            Log.d("tttdasd",  response.headers.toString())
+
+
             response
         }.build()
 

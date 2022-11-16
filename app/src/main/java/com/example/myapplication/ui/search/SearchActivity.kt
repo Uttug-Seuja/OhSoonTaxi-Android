@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.R
@@ -47,6 +48,12 @@ class SearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         // 키보드 설정
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.toastMessage.collect { message ->
+                Toast.makeText(this@SearchActivity, message, Toast.LENGTH_SHORT).show()
+            }
+        }
 
         // 데이터 바인딩
         binding.viewModel = viewModel

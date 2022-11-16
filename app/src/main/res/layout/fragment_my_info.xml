@@ -3,7 +3,7 @@
 <layout>
     <data>
         <variable
-            name="viewModel"
+            name="viewmodel"
             type="com.example.myapplication.ui.my_info.MyInfoViewModel" />
     </data>
 
@@ -157,6 +157,7 @@
 
                 <LinearLayout
                     android:id="@+id/like_btn"
+                    app:onSingleClick="@{() -> viewmodel.onClickedMyInterest()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
@@ -184,6 +185,7 @@
 
                 <LinearLayout
                     android:id="@+id/edit_btn"
+                    app:onSingleClick="@{() -> viewmodel.onClickedMyCreate()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="30dp"
@@ -212,6 +214,7 @@
 
                 <LinearLayout
                     android:id="@+id/post_btn"
+                    app:onSingleClick="@{() -> viewmodel.onClickedMyUsage()}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"

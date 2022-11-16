@@ -4,18 +4,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.data.CalendarDateModel
-import com.example.myapplication.data.Match
 import com.example.myapplication.data.ReservesSportDateData
 import com.example.myapplication.databinding.ItemRecyclerPromiseBinding
 import com.example.myapplication.ui.detail.DetailActivity
 import kotlin.collections.ArrayList
 
-class MatchAdapter (val context: Context) : RecyclerView.Adapter<MatchAdapter.ViewHolder>() {
+class MatchAdapter (val onClickListener: ItemClickListener, val context: Context) : RecyclerView.Adapter<MatchAdapter.ViewHolder>() {
     private var items = ArrayList<ReservesSportDateData>()
 //    private val gender = arrayListOf<String>("남녀모두", "남자만", "여자만")
     private val gender = hashMapOf<String, String>("ALL" to "남녀모두", "MAN" to "남자만", "WOMAN" to "여자만" )
@@ -24,6 +22,13 @@ class MatchAdapter (val context: Context) : RecyclerView.Adapter<MatchAdapter.Vi
     private val stateTextColor = hashMapOf<String, String>("POSSIBLE" to "#FFFFFF" , "IMMINENT" to "#FFFFFF",  "DEADLINE" to "#cccccc" )
     private val stateBtnColor = hashMapOf<String, String>("POSSIBLE" to "#1570ff" , "IMMINENT" to "#FF4D37",  "DEADLINE" to "#EEEEEE" )
 
+
+    interface ItemClickListener {
+        fun onItemClickListener(
+            item: ReservesSportDateData,
+            position: Int,
+        )
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemRecyclerPromiseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -56,16 +61,9 @@ class MatchAdapter (val context: Context) : RecyclerView.Adapter<MatchAdapter.Vi
 
         fun clickItem(reservesSportDateData: ReservesSportDateData){
             binding.matchCardView.setOnClickListener {
-                // 원하는 화면 연결
-                Intent(context, DetailActivity::class.java).apply {
-                    // 데이터 전달
-                    putExtra("reserveId", reservesSportDateData.reserveId)
-                    putExtra("userId", reservesSportDateData.userId)
+                onClickListener.onItemClickListener(reservesSportDateData, adapterPosition)
 
-                }.run {
-                    //액티비티 열기
-                    context.startActivity(this)
-                }
+
             }
 
         }
