@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="viewmodel"
             type="com.example.myapplication.ui.my_info.MyInfoViewModel" />
     </data>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
@@ -224,9 +224,9 @@
 
                     <ImageView
                         android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:layout_height="45dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/taxi" />
+                        android:src="@drawable/taxi3" />
 
                     <TextView
                         android:layout_width="wrap_content"

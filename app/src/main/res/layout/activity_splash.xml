@@ -11,17 +11,17 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
-        android:background="@color/drawer_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="335dp"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:gravity="center_horizontal"
             android:letterSpacing="0"
             android:lineSpacingExtra="4.7sp"
-            android:text="오순도순\n함께 운동하면서\n이야기해봐요"
+            android:src="@drawable/taxi2"
             android:textColor="@color/white"
             android:textSize="28sp"
             android:textStyle="bold"
@@ -29,6 +29,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0"
+            android:lineSpacingExtra="4.7sp"
+            android:text="오늘의 순천향 택시"
+            android:textColor="@color/white"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
 
 

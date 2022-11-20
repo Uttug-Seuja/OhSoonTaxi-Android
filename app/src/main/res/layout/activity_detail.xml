@@ -133,6 +133,18 @@
                         android:layout_marginBottom="20dp"
                         android:orientation="vertical">
 
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:text="약속 정보"
+                            android:src="@drawable/taxi1"
+                            android:textColor="@color/black"
+                            android:textSize="16dp"
+                            android:textStyle="bold" />
+
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -140,7 +152,6 @@
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="20dp"
-                            android:layout_marginTop="20dp"
                             android:layout_marginEnd="20dp"
                             android:layout_marginBottom="5dp"
                             android:text="약속 정보"

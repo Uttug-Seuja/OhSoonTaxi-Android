@@ -30,6 +30,12 @@
         <item name="android:background">@drawable/bottom_sheet_background</item>
     </style>
 
+    <!-- Splash 화면 테마 -->
+    <style name="Theme.MyApp.Splash" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/drawer_background</item>
+        <item name="android:windowBackground">@color/drawer_background</item>
+    </style>
+
 
     <style name="Theme.home.OhSoonTaxiAndroid" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->

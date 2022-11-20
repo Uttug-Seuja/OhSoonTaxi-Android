@@ -56,7 +56,7 @@ class HomeFragment : Fragment(), CalendarAdapter.ItemClickListener, MatchAdapter
     override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater {
         val inflater = super.onGetLayoutInflater(savedInstanceState)
         val contextThemeWrapper: Context =
-            ContextThemeWrapper(requireContext(), R.style.Theme_home_OhSoonTaxiAndroid)
+            ContextThemeWrapper(activity, R.style.Theme_home_OhSoonTaxiAndroid)
         return inflater.cloneInContext(contextThemeWrapper)
     }
 
@@ -68,12 +68,14 @@ class HomeFragment : Fragment(), CalendarAdapter.ItemClickListener, MatchAdapter
         val themedInflater =
             inflater.cloneInContext(
                 ContextThemeWrapper(
-                    requireActivity(),
+                    activity,
                     R.style.Theme_home_OhSoonTaxiAndroid
                 )
             )
 
 
+
+//        binding = FragmentHomeBinding.inflate(themedInflater, container, false)
         _binding = FragmentHomeBinding.inflate(themedInflater, container, false)
         binding.viewmodel = viewModel
 

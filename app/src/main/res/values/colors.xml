@@ -9,12 +9,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#ea3e42</color>
     <color name="blue">#3534A5</color>
-    <color name="calender_picker">#1570ff</color>
+    <color name="calender_picker">#1e9ad6</color>
     <color name="calender_soldOut">#FF4D37</color>
     <color name="colorPrimary">#293263</color>
     <color name="colorPrimaryDark">#000b38</color>
     <color name="colorAccent">#565b91</color>
     <color name="shimmerColor">#3A4478</color>
-    <color name="drawer_background">#007680</color>
+    <color name="drawer_background">#1E9AD6</color>
 
 </resources>

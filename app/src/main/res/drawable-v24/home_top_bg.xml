@@ -12,9 +12,9 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:shape="rectangle">
         <gradient
-            android:startColor="@color/calender_picker"
-            android:endColor="@color/calender_picker"
-            android:centerColor="@color/calender_picker"
+            android:startColor="#4bb3e6"
+            android:endColor="#4bb3e6"
+            android:centerColor="#4bb3e6"
             android:angle="180"
             />
         <corners
