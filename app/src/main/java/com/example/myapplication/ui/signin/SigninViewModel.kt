@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import okhttp3.internal.notify
 
 class SigninViewModel(private val repository: UserRepository) : BaseViewModel() {
 
@@ -36,6 +37,7 @@ class SigninViewModel(private val repository: UserRepository) : BaseViewModel() 
             baseViewModelScope.launch {
                 repository.retrofitSignIn(signIn)
                     .onSuccess {
+                        Log.d("ttt", it.toString())
 
                         _navigationEvent.emit(SignInNavigationAction.NavigateToHome)
                     }

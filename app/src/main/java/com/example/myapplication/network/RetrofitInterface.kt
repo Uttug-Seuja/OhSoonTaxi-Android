@@ -3,6 +3,7 @@ package com.example.myapplication.network
 import com.example.myapplication.common.utils.API
 import com.example.myapplication.data.*
 import com.example.myapplication.data.ReservesCreation
+import com.google.gson.JsonObject
 import retrofit2.Response
 import retrofit2.http.*
 import retrofit2.http.Body
@@ -24,7 +25,7 @@ interface RetrofitInterface {
     @POST(API.POST_USERS_SIGNIN)
     suspend fun postUsersLogin(
         @Body login: Login,
-    ): Response<Unit>
+    )
 
     // 아이디 중복확인
     @Headers("Content-Type: application/json")
@@ -61,14 +62,14 @@ interface RetrofitInterface {
     @Headers("Content-Type: application/json")
     @GET(API.GET_RESERVES)
     suspend fun getReserves(
-        @Path("reserveId") reserveId: Int,
+        @Path("reservationId") reservationId: Int,
     ): ReservesResponse
 
     // 날짜 별로 약속 조회
     @Headers("Content-Type: application/json")
     @GET(API.GET_RESERVES_LIST)
     suspend fun getReservesList(
-        @Query("reservationId") reservationId: String,
+        @Query("reservationDate") reservationDate: String,
     ): ReservesListResponse
 
     // 해당 약속 암구호 조회
@@ -129,7 +130,8 @@ interface RetrofitInterface {
     @Headers("Content-Type: application/json")
     @GET(API.GET_PARTICIPATION_CHECK)
     suspend fun getParticipationCheck(
-        @Query("userUid") userUid: String,
         @Path("reservationId") reservationId: Int,
-    )
+
+        @Query("userUid") userUid: String,
+    ) : String
 }

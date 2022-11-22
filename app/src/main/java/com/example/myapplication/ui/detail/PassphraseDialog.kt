@@ -18,8 +18,11 @@ class PassphraseDialog : AppCompatActivity() {
         setContentView(binding.root)
         binding.dialog = this
         binding.lifecycleOwner = this
+        val challengeWord = intent.getStringExtra("challengeWord")
+        val countersignWord = intent.getStringExtra("countersignWord")
 
-        binding.passphraseText.text = "문어에 \"칙칙\" 답어에 \"폭폭\" 입니다."
+
+        binding.passphraseText.text = "문어에 \"$challengeWord\" 답어에 \"$countersignWord\" 입니다."
 
 
         // 1. SpannableStringBuilder 타입으로 변환

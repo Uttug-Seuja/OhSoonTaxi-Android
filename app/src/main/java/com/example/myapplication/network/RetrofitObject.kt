@@ -12,7 +12,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object RetrofitObject {
-    var token: String = ""
+    var authorizationToken: String = ""
+    var refreshToken: String = ""
+
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -27,13 +29,17 @@ object RetrofitObject {
 
                 val response = it.proceed(original)
 
+                Log.d("tttdasd1111", response.toString())
+                Log.d("tttdasd2222", response.headers["Authorization"].toString())
+                authorizationToken = response.headers["Authorization"].toString()
+                refreshToken = response.headers["RefreshToken"].toString()
                 response
 
             } else {
 
                 val request = original.newBuilder().apply {
-                    addHeader("Authorization", token)
-                        .addHeader("RefreshToken", token)
+                    addHeader("Authorization", authorizationToken)
+                        .addHeader("RefreshToken", refreshToken)
                 }.build()
 
                 val response = it.proceed(request)

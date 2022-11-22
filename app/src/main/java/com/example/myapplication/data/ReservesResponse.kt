@@ -25,7 +25,7 @@ data class ReservesResponseData(
     @SerializedName("userUid") val userUid: String,
     @SerializedName("name") val name: String,
     @SerializedName("schoolNum") val schoolNum: String,
-    @SerializedName("participations") val participations: Participations,
+    @SerializedName("participations") val participations: MutableList<Participations>,
 
     )
 
@@ -33,4 +33,6 @@ data class Participations(
 
     @SerializedName("schoolNum") val schoolNum: String,
     @SerializedName("name") val name: String,
-)
+    @SerializedName("seatPosition") val seatPosition: Int,
+
+    )

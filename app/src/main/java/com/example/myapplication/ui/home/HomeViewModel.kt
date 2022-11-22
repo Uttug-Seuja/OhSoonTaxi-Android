@@ -32,10 +32,10 @@ class HomeViewModel (private val repository: HomeRepository) : BaseViewModel(){
     }
 
     // 날짜 별로 약속 조회
-    fun reservesDateRetrofit(reservationId: String) = viewModelScope.launch {
+    fun reservesDateRetrofit(reservationDate: String) = viewModelScope.launch {
 
             baseViewModelScope.launch {
-                repository.retrofitReservesSportDate(reservationId)
+                repository.retrofitReservesSportDate(reservationDate)
                     .onSuccess {
                         _reservesSportDateEvent.emit(it)
                     }

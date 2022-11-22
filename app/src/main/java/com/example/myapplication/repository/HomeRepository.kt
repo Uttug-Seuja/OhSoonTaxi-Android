@@ -22,9 +22,9 @@ class HomeRepository (application : Application) {
     }
 
     // 날짜 별로 약속 조회
-    suspend fun retrofitReservesSportDate(reservationId: String): BaseResult<ReservesListResponse> {
+    suspend fun retrofitReservesSportDate(reservationDate: String): BaseResult<ReservesListResponse> {
 
-        return handleResult{ RetrofitObject.getRetrofitService.getReservesList(reservationId)}
+        return handleResult{ RetrofitObject.getRetrofitService.getReservesList(reservationDate)}
     }
 
 

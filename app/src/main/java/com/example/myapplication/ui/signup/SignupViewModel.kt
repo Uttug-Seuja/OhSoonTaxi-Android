@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.common.base.BaseViewModel
 import com.example.myapplication.data.User
+import com.example.myapplication.network.BaseResult
 import com.example.myapplication.network.onError
 import com.example.myapplication.network.onSuccess
 import com.example.myapplication.repository.UserRepository
@@ -35,18 +36,20 @@ class SignupViewModel(private val repository: UserRepository) : BaseViewModel() 
             && userStudentIdEvent.value.isNotEmpty() && userGenderEvent.value.isNotEmpty() && userPhoneNumberEvent.value.isNotEmpty()
             && userIdDoubleCheckEvent
         ) {
+
             val signup = User(
-                userIdEvent.value,
-                userPasswordEvent.value,
-                userNameEvent.value,
-                userStudentIdEvent.value,
-                userGenderEvent.value,
-                userPhoneNumberEvent.value
+                uid = userIdEvent.value,
+                password = userPasswordEvent.value,
+                name = userNameEvent.value,
+                phoneNum = userPhoneNumberEvent.value,
+                schoolNum = userStudentIdEvent.value,
+                sex = userGenderEvent.value,
             )
 
             baseViewModelScope.launch {
                 repository.retrofitSignUp(signup)
                     .onSuccess {
+
                         _navigationEvent.emit(SignupNavigationAction.NavigateToSignIn)
                     }
                     .onError { e ->
@@ -74,9 +77,7 @@ class SignupViewModel(private val repository: UserRepository) : BaseViewModel() 
                 Log.d("Ttt", userIdEvent.value)
                 repository.retrofitPostUsersCheckUnique(userIdEvent.value)
                     .onSuccess {
-                        Log.d(
-                            "Ttt valeu", it.toString()
-                        )
+
                         userIdDoubleCheckEvent = true
                     }
                     .onError { e ->

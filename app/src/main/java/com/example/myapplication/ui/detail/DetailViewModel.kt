@@ -25,8 +25,8 @@ class DetailViewModel(private val repository: DetailRepository) : BaseViewModel(
     private val _navigationEvent: MutableSharedFlow<DetailNavigationAction> = MutableSharedFlow()
     val navigationEvent: SharedFlow<DetailNavigationAction> = _navigationEvent
 
-    private val _retrofitReservesEvent: MutableSharedFlow<ReservesResponse> = MutableSharedFlow()
-    val retrofitReservesEvent: SharedFlow<ReservesResponse> = _retrofitReservesEvent
+    private val _retrofitReservesEvent: MutableSharedFlow<ReservesResponseData> = MutableSharedFlow()
+    val retrofitReservesEvent: SharedFlow<ReservesResponseData> = _retrofitReservesEvent
 
     private val _retrofitParticipationEvent: MutableSharedFlow<String> = MutableSharedFlow()
     val retrofitParticipationEvent: SharedFlow<String> = _retrofitParticipationEvent
@@ -34,17 +34,15 @@ class DetailViewModel(private val repository: DetailRepository) : BaseViewModel(
     private val _retrofitPassphraseEvent: MutableSharedFlow<PassphraseResponse> = MutableSharedFlow()
     val retrofitPassphraseEvent: SharedFlow<PassphraseResponse> = _retrofitPassphraseEvent
 
-    init {
-        reservesRetrofit(1000)
-    }
-
 
     // 게시글 정보 보기
-    fun reservesRetrofit(reserveId: Int) = viewModelScope.launch {
+    fun reservesRetrofit(reservationId: Int) = viewModelScope.launch {
+        Log.d("ttt", "Ttttttttt")
 
         baseViewModelScope.launch {
-            repository.retrofitReserves(reserveId)
+            repository.retrofitReserves(reservationId)
                 .onSuccess {
+                    Log.d("Ttt title", it.title.toString())
                     _retrofitReservesEvent.emit(it)
                 }
                 .onError { e ->
@@ -76,12 +74,13 @@ class DetailViewModel(private val repository: DetailRepository) : BaseViewModel(
     }
 
     // 경기 상태 보기
-    fun getParticipationCheckRetrofit(userId: String, reservationId: Int) = viewModelScope.launch {
+    fun getParticipationCheckRetrofit(reservationId: Int, userUid: String ) = viewModelScope.launch {
 
         baseViewModelScope.launch {
-            repository.retrofitGetParticipationCheck(userId, reservationId)
+            repository.retrofitGetParticipationCheck(reservationId, userUid)
                 .onSuccess {
                     it.toString()
+                    Log.d("ttt partic", it.toString())
                 }
                 .onError { e ->
                     Log.d("ttt", e.toString())

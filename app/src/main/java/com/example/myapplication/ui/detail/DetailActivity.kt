@@ -3,6 +3,7 @@ package com.example.myapplication.ui.detail
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
@@ -22,9 +23,8 @@ import com.example.myapplication.NavHostActivity
 import com.example.myapplication.R
 import com.example.myapplication.adapter.CustomBalloonAdapter
 import com.example.myapplication.adapter.MarkerEventListener
+import com.example.myapplication.data.Participations
 import com.example.myapplication.databinding.ActivityDetailBinding
-import com.example.myapplication.ui.home.HomeNavigationAction
-import com.example.myapplication.ui.search.SearchActivity
 import com.example.myapplication.ui.update.UpdateActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import net.daum.mf.map.api.MapPOIItem
@@ -49,6 +49,32 @@ class DetailActivity : AppCompatActivity() {
     private var bottomSheetDialog: BottomSheetDialog? = null
     private val seatAnswerList = mutableListOf<Boolean>(false, false, false, false)
     private var seatAnswer = -1
+    private var reserveDate: String? = null
+    private val gender =
+        hashMapOf<String, String>("ALL" to "남녀모두", "MAN" to "남자만", "WOMAN" to "여자만")
+    private val reserveStatus =
+        hashMapOf<String, String>("POSSIBLE" to "좌석선택", "IMMINENT" to "좌석선택", "DEADLINE" to "신청 마감")
+    private val stateTextColor = hashMapOf<String, String>(
+        "POSSIBLE" to "#FFFFFF",
+        "IMMINENT" to "#FFFFFF",
+        "DEADLINE" to "#cccccc"
+    )
+    private val stateBtnColor = hashMapOf<String, String>(
+        "POSSIBLE" to "#1570ff",
+        "IMMINENT" to "#1570ff",
+        "DEADLINE" to "#EEEEEE"
+    )
+    private var startingPlace: String? = null
+    private var destination: String? = null
+    private var startLatitude: Double? = null
+    private var startLongitude: Double? = null
+    private var finishLatitude: Double? = null
+    private var finishLongitude: Double? = null
+    private var currentNum: Int? = null
+    private var challengeWord: String? = null
+    private var countersignWord: String? = null
+    private var reserveId: String? = null
+
 
     private val seatSelectButton = mutableListOf(
         R.id.seat1_select_btn,
@@ -57,8 +83,7 @@ class DetailActivity : AppCompatActivity() {
         R.id.seat4_select_btn
     )
 
-    private val selectSeatPosition =
-        mutableListOf(mutableListOf(1, "18학번", "김찬우"), mutableListOf(3, "18학번", "이건희"))
+    private var selectSeatPosition: MutableList<Participations>? = null
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +95,53 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true) // 드로어를 꺼낼 홈 버튼 활성화
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_previous) // 홈버튼 이미지 변경
         supportActionBar?.setDisplayShowTitleEnabled(false) // 툴바에 타이틀 안보이게
+        reserveId = intent.getIntExtra("reserveId", 0).toString()
+
+        viewModel.reservesRetrofit(reserveId!!.toInt())
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.retrofitReservesEvent.collect {
+
+                val createdAtSplit = it.createdAt.split("T")
+                val createdAtSplitDate = createdAtSplit[0]
+                val createdAtSplitTime = createdAtSplit[1].substring(0, 5)
+
+
+                binding.mainToolbarText.text = "${it.startingPlace} -> ${it.destination}"
+                binding.nameText.text = "${it.name}(${gender[it.sex]})"
+                binding.schoolNumText.text = "${it.schoolNum.substring(2, 4)}학번"
+                binding.titleText.text = it.title
+                binding.createdAtText.text = "$createdAtSplitDate $createdAtSplitTime"
+                binding.startingPlaceText.text = it.startingPlace
+                binding.destinationText.text = it.destination
+                binding.reserveTimeText.text = it.reserveTime.substring(0, 5)
+                binding.reserveDateText.text = it.reserveDate
+                binding.sexText.text = gender[it.sex]
+                binding.passengerNumText.text = it.passengerNum.toString()
+                binding.restText.text = (it.passengerNum - it.currentNum).toString()
+                startLatitude = it.startLatitude
+                startLongitude = it.startLongitude
+                finishLatitude = it.finishLatitude
+                finishLongitude = it.finishLongitude
+                startingPlace = it.startingPlace
+                destination = it.destination
+                currentNum = it.currentNum
+                reserveDate = it.reserveDate
+                selectSeatPosition = it.participations
+                makeMap()
+                makeBottomSheetView()
+
+
+                binding.applyBtn.setCardBackgroundColor(Color.parseColor(stateBtnColor[it.reservationStatus]))
+                binding.applyText.text = reserveStatus[it.reservationStatus]
+                binding.applyText.setTextColor(Color.parseColor(stateTextColor[it.reservationStatus]))
+
+                challengeWord = it.challengeWord
+                countersignWord = it.countersignWord
+
+
+            }
+        }
 
 
         lifecycleScope.launchWhenStarted {
@@ -83,7 +155,7 @@ class DetailActivity : AppCompatActivity() {
                 when (it) {
                     is DetailNavigationAction.NavigateToBackNav -> {
                         val intent = Intent(this@DetailActivity, NavHostActivity::class.java)
-                        intent.putExtra("id", "2022-12-06")
+                        intent.putExtra("id", reserveDate)
                         intent.putExtra("password", "이건희")
                         setResult(RESULT_OK, intent)
                         finish()
@@ -93,6 +165,9 @@ class DetailActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun makeMap() {
         val customBalloonAdapter = CustomBalloonAdapter(layoutInflater)
 
         binding.mapView.setPOIItemEventListener(eventListener)  // 마커 클릭 이벤트 리스너 등록
@@ -102,8 +177,8 @@ class DetailActivity : AppCompatActivity() {
         binding.mapView.currentLocationTrackingMode =
             MapView.CurrentLocationTrackingMode.TrackingModeOff
         val mapPoint = MapPoint.mapPointWithGeoCoord(
-            (36.77319581029296 + 36.77319581029296) / 2,
-            (126.93359085592283 + 126.951393082675) / 2
+            (startLatitude!! + finishLatitude!!) / 2,
+            (startLongitude!! + finishLatitude!!) / 2
         )
         binding.mapView.setMapCenterPointAndZoomLevel(mapPoint, 6, true)
 
@@ -125,13 +200,18 @@ class DetailActivity : AppCompatActivity() {
         })
 
 
+    }
+
+
+    private fun makeBottomSheetView() {
         val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_seat_layout, null)
         bottomSheetDialog = BottomSheetDialog(this)
         bottomSheetDialog!!.setContentView(bottomSheetView)
 
-        selectSeatPosition.forEach {
-            seatAnswerList[it[0] as Int - 1] = true
-            bottomSheetView.findViewById<TextView>(seatSelectButton[it[0] as Int - 1]).text = "${it[1]}\n${it[2]}"
+        selectSeatPosition!!.forEach {
+            seatAnswerList[it.seatPosition] = true
+            bottomSheetView.findViewById<TextView>(seatSelectButton[it.seatPosition]).text =
+                "${it.schoolNum.substring(2, 4)}학번\n${it.name}"
 
         }
 
@@ -245,14 +325,34 @@ class DetailActivity : AppCompatActivity() {
             }
         }
 
+
+        // 좌석 선택 및 암구호 확인 버튼
         bottomSheetView.findViewById<View>(R.id.seat_answer_btn).setOnClickListener {
             seatAnswer // 사용자가 선택한 좌석
             bottomSheetDialog!!.dismiss()
 
-            startActivity(Intent(this, PassphraseDialog::class.java))
+            viewModel.getParticipationCheckRetrofit(reserveId!!.toInt(), "jo")
+
+            lifecycleScope.launchWhenStarted {
+                viewModel.navigationEvent.collect {
+                    when (it) {
+                        is DetailNavigationAction.NavigateToBackNav -> {
+                            val intent = Intent(this@DetailActivity, NavHostActivity::class.java)
+                            intent.putExtra("id", reserveDate)
+                            intent.putExtra("password", "이건희")
+                            setResult(RESULT_OK, intent)
+                            finish()
+                        }
+                    }
+                }
+            }
+
+            val intent = Intent(this@DetailActivity, PassphraseDialog::class.java)
+            intent.putExtra("challengeWord", challengeWord)
+            intent.putExtra("countersignWord", countersignWord)
+            startActivity(intent)
 
         }
-
     }
 
     // 검색 결과 처리 함수
@@ -265,10 +365,10 @@ class DetailActivity : AppCompatActivity() {
         // 지도에 마커 추가
         var point = MapPOIItem()
         point.apply {
-            itemName = "순천향대학교 후문"// 마커 이름
+            itemName = startingPlace// 마커 이름
             mapPoint = MapPoint.mapPointWithGeoCoord( // 좌표
-                36.77319581029296,
-                126.93359085592283
+                startLatitude!!,
+                startLongitude!!
 
             )
             markerType = MapPOIItem.MarkerType.BluePin // 마커 모양
@@ -279,10 +379,10 @@ class DetailActivity : AppCompatActivity() {
 
         point = MapPOIItem()
         point.apply {
-            itemName = "신창역"// 마커 이름
+            itemName = destination// 마커 이름
             mapPoint = MapPoint.mapPointWithGeoCoord( // 좌표
-                36.7696422998843,
-                126.951393082675
+                finishLatitude!!,
+                finishLongitude!!
 
             )
             markerType = MapPOIItem.MarkerType.BluePin // 마커 모양
@@ -290,7 +390,10 @@ class DetailActivity : AppCompatActivity() {
         }
 
         var distance =
-            calDist(36.77319581029296, 126.93359085592283, 36.7696422998843, 126.951393082675)
+            calDist(startLatitude!!, startLongitude!!, finishLatitude!!, finishLongitude!!)
+
+
+        Log.d("ttt distance", distance.toString())
 
 
         // http://www.taxi.or.kr/02/01.php <= 기역별 택시 요금안내
@@ -307,17 +410,9 @@ class DetailActivity : AppCompatActivity() {
 
         }
 
-        binding.paymentFeeText.text = "약 ${fee / 3}원"
+        if (currentNum == 0) currentNum = 1
 
-        Log.d(
-            "ttt",
-            calDist(
-                36.77319581029296,
-                126.93359085592283,
-                36.7696422998843,
-                126.951393082675
-            ).toString()
-        )
+        binding.paymentFeeText.text = "약 ${fee / currentNum!!}원"
         binding.mapView.addPOIItem(point)
 
 
@@ -388,9 +483,10 @@ class DetailActivity : AppCompatActivity() {
 
         return ret.roundToLong() // 미터 단위
     }
+
     override fun onBackPressed() {
         val intent = Intent(this@DetailActivity, NavHostActivity::class.java)
-        intent.putExtra("id", "2022-12-06")
+        intent.putExtra("id", reserveDate)
         intent.putExtra("password", "이건희")
         setResult(RESULT_OK, intent)
         finish()

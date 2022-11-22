@@ -2,6 +2,7 @@ package com.example.myapplication.repository
 
 import android.app.Application
 import com.example.myapplication.data.*
+import com.example.myapplication.mapper.toDomain
 import com.example.myapplication.network.BaseResult
 import com.example.myapplication.network.RetrofitObject
 import com.example.myapplication.network.handleResult
@@ -10,8 +11,8 @@ import com.google.gson.JsonObject
 class DetailRepository(application: Application) {
 
     // 경기 정보
-    suspend fun retrofitReserves(reserveId: Int): BaseResult<ReservesResponse> {
-        return handleResult{ RetrofitObject.getRetrofitService.getReserves(reserveId)}
+    suspend fun retrofitReserves(reservationId: Int): BaseResult<ReservesResponseData> {
+        return handleResult{ RetrofitObject.getRetrofitService.getReserves(reservationId).reservesResponseData.toDomain()}
     }
 
     // 경기 삭제
@@ -20,8 +21,8 @@ class DetailRepository(application: Application) {
     }
 
     // 경기 상태
-    suspend fun retrofitGetParticipationCheck(userUid: String, reservationId: Int): BaseResult<Unit> {
-        return handleResult{ RetrofitObject.getRetrofitService.getParticipationCheck(userUid, reservationId)}
+    suspend fun retrofitGetParticipationCheck(reservationId: Int, userUid: String): BaseResult<Unit> {
+        return handleResult{ RetrofitObject.getRetrofitService.getParticipationCheck(reservationId, userUid)}
     }
 
     // 경기 참여

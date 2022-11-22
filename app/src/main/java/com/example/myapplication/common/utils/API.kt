@@ -19,7 +19,7 @@ object API {
     // reserves
     const val POST_RESERVES_ADD : String = "/reservation/add"
     const val DELETE_RESERVES : String = "/reservation/delete/{reservationId}"
-    const val GET_RESERVES : String = "/reservation/{reserveId}"
+    const val GET_RESERVES : String = "/reservation/{reservationId}"
     const val GET_RESERVES_LIST : String = "/reservation/list"
     const val GET_RESERVES_PASSPHRASE : String = "/reservation/passphrase/{reservationId}"
     const val GET_RESERVES_LIST_RESERVATIONS : String = "/reservation/list/reservations"

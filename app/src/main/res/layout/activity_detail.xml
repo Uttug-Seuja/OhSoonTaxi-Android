@@ -24,10 +24,10 @@
             android:layout_height="?attr/actionBarSize">
 
             <TextView
+                android:id="@+id/mainToolbar_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="신창역 -> 순천향대 후문"
                 android:textColor="@color/black"
                 android:textSize="16dp"
                 android:textStyle="bold" />
@@ -76,17 +76,18 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/name_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="조준장(남자)"
                             android:textColor="@color/black"
                             android:textSize="16dp"
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/schoolNum_text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="18학번" />
+                             />
 
 
                     </LinearLayout>
@@ -104,22 +105,22 @@
                     android:background="#eeeeee" />
 
                 <TextView
+                    android:id="@+id/title_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginEnd="30dp"
-                    android:text="오늘 같이 택시 탈 사람 있나요?!"
                     android:textColor="@color/black"
                     android:textSize="16dp"
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/createdAt_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginEnd="30dp"
-                    android:text="2022.11.27 12:00" />
+                    android:layout_marginEnd="30dp" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
@@ -181,6 +182,7 @@
 
 
                             <TextView
+                                android:id="@+id/startingPlace_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -221,6 +223,7 @@
 
 
                             <TextView
+                                android:id="@+id/destination_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -260,6 +263,7 @@
 
 
                             <TextView
+                                android:id="@+id/reserveTime_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -299,6 +303,7 @@
 
 
                             <TextView
+                                android:id="@+id/reserveDate_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -353,6 +358,7 @@
 
 
                             <TextView
+                                android:id="@+id/sex_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -391,6 +397,7 @@
 
 
                             <TextView
+                                android:id="@+id/passengerNum_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -429,6 +436,7 @@
 
 
                             <TextView
+                                android:id="@+id/rest_text"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -633,7 +641,7 @@
                 app:layout_constraintHorizontal_bias="0.504">
 
                 <TextView
-                    android:id="@+id/apply_text12"
+                    android:id="@+id/apply_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
