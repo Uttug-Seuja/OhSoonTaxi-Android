@@ -58,35 +58,74 @@
                 android:gravity="fill_vertical">
 
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/id_edit_text_layout"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="20dp"
-                    android:ems="10"
-                    android:gravity="center"
-                    android:inputType="textPersonName"
-                    android:maxLength="10"
-                    android:textColorHint="#979797"
-                    android:textSize="18sp"
-                    app:boxStrokeColor="@color/drawer_background"
-                    app:endIconMode="clear_text"
-                    app:hintTextColor="#979797">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/id_edit_text"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/id_edit_text_layout"
+                        android:layout_weight="3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autoSizeMinTextSize="18dp"
-                        android:text="@={viewmodel.userIdEvent}"
-                        android:backgroundTint="@color/white"
-                        android:hint="아이디"
-                        android:letterSpacing="0"
-                        android:lineSpacingExtra="-12sp"
+                        android:ems="10"
+                        android:gravity="center"
+                        android:inputType="textPersonName"
+                        android:maxLength="10"
+                        android:textColorHint="#979797"
                         android:textSize="18sp"
-                        android:textStyle="normal" />
+                        app:boxStrokeColor="@color/drawer_background"
+                        app:endIconMode="clear_text"
+                        app:hintTextColor="#979797">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/id_edit_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoSizeMinTextSize="18dp"
+                            android:text="@={viewmodel.userIdEvent}"
+                            android:backgroundTint="@color/white"
+                            android:hint="아이디"
+                            android:letterSpacing="0"
+                            android:lineSpacingExtra="-12sp"
+                            android:textSize="18sp"
+                            android:textStyle="normal" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="59dp"
+                        android:layout_weight="9"
+                        android:layout_marginStart="20dp"
+                        android:backgroundTint="@color/drawer_background"
+                        app:onSingleClick="@{() -> viewmodel.postUsersCheckUniqueRetrofit()}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:letterSpacing="0"
+                            android:lineSpacingExtra="-4sp"
+                            android:text="중복확인"
+                            android:textColor="@color/white"
+                            android:textSize="14dp"
+                            android:textStyle="normal" />
+
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
+
+
 
 
 

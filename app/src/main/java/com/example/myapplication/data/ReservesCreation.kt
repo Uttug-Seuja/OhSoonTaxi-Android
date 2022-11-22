@@ -2,16 +2,17 @@ package com.example.myapplication.data
 
 
 data class ReservesCreation(
-    val userId: Int,
     val title: String,
-    val explanation: String,
-    val recruitmentNum: Int,
-    val sport: String,
-    val endT: String,
-    val startT: String,
     val reserveDate: String,
-    val place: String,
-    val gender: String,
-
-
-    )
+    val reserveTime: String,
+    val startingPlace: String,
+    val destination: String,
+    val sex: String,
+    val passengerNum: Int,
+    val challengeWord: String,
+    val countersignWord: String,
+    val startLatitude: Double,
+    val startLongitude: Double,
+    val finishLatitude: Double,
+    val finishLongitude: Double
+)

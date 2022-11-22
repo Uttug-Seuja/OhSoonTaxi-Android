@@ -28,6 +28,7 @@ class SigninViewModel(private val repository: UserRepository) : BaseViewModel() 
     var loginIdEvent: MutableStateFlow<String> = MutableStateFlow<String>("")
     var passwordEvent: MutableStateFlow<String> = MutableStateFlow<String>("")
 
+    // 로그인
     fun signInRetrofit() = viewModelScope.launch {
         if (loginIdEvent.value.isNotEmpty() && passwordEvent.value.isNotEmpty()) {
             val signIn = Login(loginIdEvent.value, passwordEvent.value)
@@ -35,6 +36,7 @@ class SigninViewModel(private val repository: UserRepository) : BaseViewModel() 
             baseViewModelScope.launch {
                 repository.retrofitSignIn(signIn)
                     .onSuccess {
+
                         _navigationEvent.emit(SignInNavigationAction.NavigateToHome)
                     }
                     .onError { e ->

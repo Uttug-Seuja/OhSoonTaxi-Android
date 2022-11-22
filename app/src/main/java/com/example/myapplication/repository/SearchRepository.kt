@@ -1,7 +1,7 @@
 package com.example.myapplication.repository
 
 import android.app.Application
-import com.example.myapplication.data.Hashtag
+import com.example.myapplication.data.ReservesListResponse
 import com.example.myapplication.network.BaseResult
 import com.example.myapplication.network.RetrofitObject
 import com.example.myapplication.network.handleResult
@@ -26,8 +26,8 @@ class SearchRepository(application : Application) {
         }
     }
 
-    // 경기 검색
-    suspend fun retrofitSearch(keyword: String): BaseResult<Hashtag> {
-        return handleResult{ RetrofitObject.getRetrofitService.getHashtagName(keyword)}
+    // 게시글 검색
+    suspend fun retrofitGetReservesSearchList(keyword: String): BaseResult<ReservesListResponse> {
+        return handleResult{ RetrofitObject.getRetrofitService.getReservesSearchList(keyword)}
     }
 }

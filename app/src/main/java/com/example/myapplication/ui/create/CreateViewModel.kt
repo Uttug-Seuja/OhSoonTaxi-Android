@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.common.base.BaseViewModel
-import com.example.myapplication.data.Promise
 import com.example.myapplication.network.onError
 import com.example.myapplication.network.onSuccess
 import com.example.myapplication.repository.CreateRepository
@@ -44,6 +43,7 @@ class CreateViewModel(private val repository: CreateRepository) : BaseViewModel(
     }
 
 
+    // 게시글 작성
     fun onCreatePromiseClicked() {
         viewModelScope.launch {
             Log.d("ttt", titleEvent.value.toString())
@@ -54,32 +54,25 @@ class CreateViewModel(private val repository: CreateRepository) : BaseViewModel(
                 && genderEvent.value != "모집 성별" && dateEvent.value != "탑승 날짜" && reservationTimeEvent.value != "탑승 시간"
             ) {
 
-
-                val promise = Promise(
-                    title = titleEvent.value,
-                    startPlace = startPlaceEvent.value,
-                    destination = destinationEvent.value,
-                    seat = seatEvent.value,
-                    gender = genderEvent.value,
-                    date = dateEvent.value,
-                    reservationTime = reservationTimeEvent.value
-
-                )
-
                 baseViewModelScope.launch {
                     repository.retrofitReservesCreation(
+                        "userUid",
                         ReservesCreation(
-                        userId = 0,
-                        title ="12",
-                        explanation = "123",
-                        recruitmentNum = 123,
-                        sport = "!23",
-                        startT = "!23",
-                        endT = "123",
-                        reserveDate = "123",
-                        place = "123",
-                        gender = "123"
-                    )
+                            title = "",
+                            reserveDate = "",
+                            reserveTime = "",
+                            startingPlace = "",
+                            destination = "",
+                            sex = "",
+                            passengerNum = 1,
+                            challengeWord = "",
+                            countersignWord = "",
+                            startLatitude = 0.0,
+                            startLongitude = 0.0,
+                            finishLatitude = 0.0,
+                            finishLongitude = 0.0
+
+                        )
                     )
                         .onSuccess {
                             _navigationEvent.emit(CreateNavigationAction.NavigateToHome)
@@ -92,7 +85,7 @@ class CreateViewModel(private val repository: CreateRepository) : BaseViewModel(
                             }
                         }
                 }
-            }else{
+            } else {
                 baseViewModelScope.launch {
                     _toastMessage.emit("빈 곳 없이 작성해주세요")
                 }

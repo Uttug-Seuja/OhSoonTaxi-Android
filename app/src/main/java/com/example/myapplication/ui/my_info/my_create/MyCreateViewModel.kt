@@ -7,10 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.common.base.BaseViewModel
-import com.example.myapplication.data.Hashtag
+import com.example.myapplication.data.ReservesListResponse
 import com.example.myapplication.network.onError
 import com.example.myapplication.network.onSuccess
-import com.example.myapplication.repository.DetailRepository
 import com.example.myapplication.repository.MyInfoRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -18,19 +17,21 @@ import kotlinx.coroutines.launch
 
 class MyCreateViewModel(private val repository: MyInfoRepository) : BaseViewModel() {
 
-    private val _retrofitSearchList: MutableSharedFlow<Hashtag> = MutableSharedFlow()
-    val retrofitSearchList: SharedFlow<Hashtag> = _retrofitSearchList
+    private val _retrofitReservesListResponseEvent: MutableSharedFlow<ReservesListResponse> = MutableSharedFlow()
+    val retrofitReservesListResponseEvent: SharedFlow<ReservesListResponse> = _retrofitReservesListResponseEvent
 
     init {
         Log.d("ttt", "123123")
     }
 
-    fun searchRetrofit(keyword : String) = viewModelScope.launch {
+
+    // 내가 만든 게시글 조회
+    fun getReservesListReservationsRetrofit(keyword : String) = viewModelScope.launch {
 
         baseViewModelScope.launch {
-            repository.retrofitSearch(keyword)
+            repository.retrofitGetReservesListReservations(keyword)
                 .onSuccess {
-                    _retrofitSearchList.emit(it)
+                    _retrofitReservesListResponseEvent.emit(it)
                 }
                 .onError { e ->
                     Log.d("ttt", e.toString())

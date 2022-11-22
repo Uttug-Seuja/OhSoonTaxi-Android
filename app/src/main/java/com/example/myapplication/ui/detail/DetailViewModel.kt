@@ -8,9 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.common.base.BaseViewModel
-import com.example.myapplication.data.Participation
-import com.example.myapplication.data.ReservesInfo
-import com.example.myapplication.data.ReservesSportDate
+import com.example.myapplication.data.*
 import com.example.myapplication.network.onError
 import com.example.myapplication.network.onSuccess
 import com.example.myapplication.repository.DetailRepository
@@ -27,19 +25,27 @@ class DetailViewModel(private val repository: DetailRepository) : BaseViewModel(
     private val _navigationEvent: MutableSharedFlow<DetailNavigationAction> = MutableSharedFlow()
     val navigationEvent: SharedFlow<DetailNavigationAction> = _navigationEvent
 
-    private val _retrofitReservesInfoEvent: MutableSharedFlow<ReservesInfo> = MutableSharedFlow()
-    val retrofitReservesInfoEvent: SharedFlow<ReservesInfo> = _retrofitReservesInfoEvent
+    private val _retrofitReservesEvent: MutableSharedFlow<ReservesResponse> = MutableSharedFlow()
+    val retrofitReservesEvent: SharedFlow<ReservesResponse> = _retrofitReservesEvent
+
+    private val _retrofitParticipationEvent: MutableSharedFlow<String> = MutableSharedFlow()
+    val retrofitParticipationEvent: SharedFlow<String> = _retrofitParticipationEvent
+
+    private val _retrofitPassphraseEvent: MutableSharedFlow<PassphraseResponse> = MutableSharedFlow()
+    val retrofitPassphraseEvent: SharedFlow<PassphraseResponse> = _retrofitPassphraseEvent
 
     init {
-        reservesInfoRetrofit(1000)
+        reservesRetrofit(1000)
     }
 
-    fun reservesInfoRetrofit(reserveId: Int) = viewModelScope.launch {
+
+    // 게시글 정보 보기
+    fun reservesRetrofit(reserveId: Int) = viewModelScope.launch {
 
         baseViewModelScope.launch {
-            repository.retrofitReservesInfo(reserveId)
+            repository.retrofitReserves(reserveId)
                 .onSuccess {
-                    _retrofitReservesInfoEvent.emit(it)
+                    _retrofitReservesEvent.emit(it)
                 }
                 .onError { e ->
                     Log.d("ttt", e.toString())
@@ -51,10 +57,11 @@ class DetailViewModel(private val repository: DetailRepository) : BaseViewModel(
         }
     }
 
-    fun deleteReservesRetrofit(reserveId: Int) = viewModelScope.launch {
+    // 게시글 삭제
+    fun deleteReservesRetrofit(userUid: String, reserveId: Int) = viewModelScope.launch {
 
         baseViewModelScope.launch {
-            repository.retrofitDeleteReserves(reserveId)
+            repository.retrofitDeleteReserves(userUid, reserveId)
                 .onSuccess {
                     _navigationEvent.emit(DetailNavigationAction.NavigateToBackNav)
                 }
@@ -68,12 +75,31 @@ class DetailViewModel(private val repository: DetailRepository) : BaseViewModel(
         }
     }
 
-    fun deleteParticipationRetrofit(participation: Participation) = viewModelScope.launch {
+    // 경기 상태 보기
+    fun getParticipationCheckRetrofit(userId: String, reservationId: Int) = viewModelScope.launch {
 
         baseViewModelScope.launch {
-            repository.retrofitDeleteParticipation(participation)
+            repository.retrofitGetParticipationCheck(userId, reservationId)
                 .onSuccess {
-                    reservesInfoRetrofit(participation.reserveId)
+                    it.toString()
+                }
+                .onError { e ->
+                    Log.d("ttt", e.toString())
+                    when (e) {
+                        is SQLiteException -> _toastMessage.emit("데이터 베이스 에러가 발생하였습니다.")
+                        else -> _toastMessage.emit("시스템 에러가 발생 하였습니다.")
+                    }
+                }
+        }
+    }
+
+    // 참여 삭제
+    fun deleteParticipationRetrofit(userUid: String, reservationId: Int) = viewModelScope.launch {
+
+        baseViewModelScope.launch {
+            repository.retrofitDeleteParticipation(userUid, reservationId)
+                .onSuccess {
+                    reservesRetrofit(reservationId)
 
                 }
                 .onError { e ->
@@ -86,12 +112,32 @@ class DetailViewModel(private val repository: DetailRepository) : BaseViewModel(
         }
     }
 
-    fun postParticipationRetrofit(participation: Participation) = viewModelScope.launch {
+    // 참여 신청
+    fun postParticipationRetrofit(userId: String, participation: Participation) = viewModelScope.launch {
 
         baseViewModelScope.launch {
-            repository.retrofitPostParticipation(participation)
+            repository.retrofitPostParticipation(userId, participation)
                 .onSuccess {
-                    reservesInfoRetrofit(participation.reserveId)
+                    reservesRetrofit(participation.reservationId)
+
+                }
+                .onError { e ->
+                    Log.d("ttt", e.toString())
+                    when (e) {
+                        is SQLiteException -> _toastMessage.emit("데이터 베이스 에러가 발생하였습니다.")
+                        else -> _toastMessage.emit("시스템 에러가 발생 하였습니다.")
+                    }
+                }
+        }
+    }
+
+    // 암구호 보기
+    fun getReservesPassphraseRetrofit(userId: String, reserveId: Int) = viewModelScope.launch {
+
+        baseViewModelScope.launch {
+            repository.retrofitGetReservesPassphrase(userId, reserveId)
+                .onSuccess {
+                    _retrofitPassphraseEvent.emit(it)
 
                 }
                 .onError { e ->

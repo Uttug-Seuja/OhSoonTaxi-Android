@@ -10,16 +10,24 @@ import com.example.myapplication.network.handleResult
 
 class UserRepository (application: Application) {
 
-    // Use Retrofit
+    // 로그인
     suspend fun retrofitSignIn(login: Login): BaseResult<Unit> {
         Log.d("ttt repository ", handleResult{ RetrofitObject.getRetrofitService.postUsersLogin(login)}.toString())
         return handleResult{ RetrofitObject.getRetrofitService.postUsersLogin(login)}
 
     }
 
+    // 회원가입
     suspend fun retrofitSignUp(user: User): BaseResult<Unit> {
 
         return handleResult{ RetrofitObject.getRetrofitService.postUsersCreation(user)}
+    }
+
+    // 아이디 중복확인
+    suspend fun retrofitPostUsersCheckUnique(uid: String): BaseResult<Unit> {
+        Log.d("ttt repository ", handleResult{ RetrofitObject.getRetrofitService.postUsersCheckUnique(uid)}.toString())
+        return handleResult{ RetrofitObject.getRetrofitService.postUsersCheckUnique(uid)}
+
     }
 
 

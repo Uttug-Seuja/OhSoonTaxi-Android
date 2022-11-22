@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.common.base.BaseViewModel
 import com.example.myapplication.data.Login
-import com.example.myapplication.data.ReservesSportDate
+import com.example.myapplication.data.ReservesListResponse
 import com.example.myapplication.network.onError
 import com.example.myapplication.network.onSuccess
 import com.example.myapplication.repository.HomeRepository
@@ -24,17 +24,18 @@ class HomeViewModel (private val repository: HomeRepository) : BaseViewModel(){
     private val _navigationEvent: MutableSharedFlow<HomeNavigationAction> = MutableSharedFlow()
     val navigationEvent: SharedFlow<HomeNavigationAction> = _navigationEvent
 
-    private val _reservesSportDateEvent: MutableSharedFlow<ReservesSportDate> = MutableSharedFlow()
-    val reservesSportDateEvent: SharedFlow<ReservesSportDate> = _reservesSportDateEvent
+    private val _reservesSportDateEvent: MutableSharedFlow<ReservesListResponse> = MutableSharedFlow()
+    val reservesSportDateEvent: SharedFlow<ReservesListResponse> = _reservesSportDateEvent
 
     init {
         Log.d("ttt", "123123")
     }
 
-    fun reservesSportDateRetrofit(sport: String, today: String) = viewModelScope.launch {
+    // 날짜 별로 약속 조회
+    fun reservesDateRetrofit(reservationId: String) = viewModelScope.launch {
 
             baseViewModelScope.launch {
-                repository.retrofitReservesSportDate(sport, today)
+                repository.retrofitReservesSportDate(reservationId)
                     .onSuccess {
                         _reservesSportDateEvent.emit(it)
                     }

@@ -103,7 +103,7 @@ class SearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
 
                             if (!it.isNullOrBlank()){
-                                viewModel.searchRetrofit(it.toString())
+                                viewModel.getReservesSearchListRetrofit(it.toString())
 
                             }else{
                                 binding.rvList.visibility = View.GONE

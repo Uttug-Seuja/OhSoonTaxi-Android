@@ -1,6 +1,6 @@
 package com.example.myapplication.data
 
 data class Login(
-    val loginId : String,
+    val uid : String,
     val password : String
 )

@@ -11,12 +11,13 @@ import com.example.myapplication.network.onError
 import com.example.myapplication.network.onSuccess
 import com.example.myapplication.repository.CreateRepository
 import com.example.myapplication.data.ReservesCreation
+import com.example.myapplication.data.ReservesEdit
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
-class UpdateViewModel (private val repository: CreateRepository) : BaseViewModel() {
+class UpdateViewModel(private val repository: CreateRepository) : BaseViewModel() {
 
     private val _navigationEvent: MutableSharedFlow<UpdateNavigationAction> = MutableSharedFlow()
     val navigationEvent: SharedFlow<UpdateNavigationAction> = _navigationEvent
@@ -38,19 +39,14 @@ class UpdateViewModel (private val repository: CreateRepository) : BaseViewModel
 
             if (titleEvent.value.isNotEmpty()) {
                 baseViewModelScope.launch {
-                    repository.retrofitReservesCreation(
-                        ReservesCreation(
-                        userId = 0,
-                        title ="12",
-                        explanation = "123",
-                        recruitmentNum = 123,
-                        sport = "!23",
-                        startT = "!23",
-                        endT = "123",
-                        reserveDate = "123",
-                        place = "123",
-                        gender = "123"
-                    )
+                    repository.retrofitReservesEdit(
+                        ReservesEdit(
+                            reserveId = 1,
+                            title = titleEvent.value
+
+                        ),
+                        userId = ""
+
                     )
                         .onSuccess {
                             _navigationEvent.emit(UpdateNavigationAction.NavigateToDetail)
@@ -64,7 +60,7 @@ class UpdateViewModel (private val repository: CreateRepository) : BaseViewModel
                             }
                         }
                 }
-            }else{
+            } else {
                 baseViewModelScope.launch {
                     _toastMessage.emit("빈 곳 없이 작성해주세요")
                 }

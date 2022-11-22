@@ -21,18 +21,28 @@ class SignupViewModel(private val repository: UserRepository) : BaseViewModel() 
     private val _navigationEvent: MutableSharedFlow<SignupNavigationAction> = MutableSharedFlow()
     val navigationEvent: SharedFlow<SignupNavigationAction> = _navigationEvent
 
-    var userIdEvent : MutableStateFlow<String> = MutableStateFlow<String>("")
-    var userPasswordEvent :MutableStateFlow<String> = MutableStateFlow<String>("")
-    var userNameEvent : MutableStateFlow<String> = MutableStateFlow<String>("")
-    var userStudentIdEvent : MutableStateFlow<String> = MutableStateFlow<String>("")
-    var userGenderEvent : MutableStateFlow<String> = MutableStateFlow<String>("")
-    var userPhoneNumberEvent : MutableStateFlow<String> = MutableStateFlow<String>("")
+    var userIdEvent: MutableStateFlow<String> = MutableStateFlow<String>("")
+    var userPasswordEvent: MutableStateFlow<String> = MutableStateFlow<String>("")
+    var userNameEvent: MutableStateFlow<String> = MutableStateFlow<String>("")
+    var userStudentIdEvent: MutableStateFlow<String> = MutableStateFlow<String>("")
+    var userGenderEvent: MutableStateFlow<String> = MutableStateFlow<String>("")
+    var userPhoneNumberEvent: MutableStateFlow<String> = MutableStateFlow<String>("")
+    var userIdDoubleCheckEvent: Boolean = false
 
+    // 회원가입
     fun signUpRetrofit() = viewModelScope.launch {
         if (userIdEvent.value.isNotEmpty() && userPasswordEvent.value.isNotEmpty() && userNameEvent.value.isNotEmpty()
-            && userStudentIdEvent.value.isNotEmpty() && userGenderEvent.value.isNotEmpty() && userPhoneNumberEvent.value.isNotEmpty()) {
-            val signup = User(userIdEvent.value, userPasswordEvent.value, userNameEvent.value, userStudentIdEvent.value,
-                userGenderEvent.value, userPhoneNumberEvent.value)
+            && userStudentIdEvent.value.isNotEmpty() && userGenderEvent.value.isNotEmpty() && userPhoneNumberEvent.value.isNotEmpty()
+            && userIdDoubleCheckEvent
+        ) {
+            val signup = User(
+                userIdEvent.value,
+                userPasswordEvent.value,
+                userNameEvent.value,
+                userStudentIdEvent.value,
+                userGenderEvent.value,
+                userPhoneNumberEvent.value
+            )
 
             baseViewModelScope.launch {
                 repository.retrofitSignUp(signup)
@@ -49,11 +59,41 @@ class SignupViewModel(private val repository: UserRepository) : BaseViewModel() 
             }
 
 
-        }else{
+        } else {
             baseViewModelScope.launch {
                 _toastMessage.emit("빈 곳 없이 작성해주세요")
             }
         }
+    }
+
+    // 아이디 중복확인
+    fun postUsersCheckUniqueRetrofit() {
+        if (userIdEvent.value.isNotEmpty()) {
+            userIdDoubleCheckEvent = true
+            baseViewModelScope.launch {
+                Log.d("Ttt", userIdEvent.value)
+                repository.retrofitPostUsersCheckUnique(userIdEvent.value)
+                    .onSuccess {
+                        Log.d(
+                            "Ttt valeu", it.toString()
+                        )
+                        userIdDoubleCheckEvent = true
+                    }
+                    .onError { e ->
+                        Log.d("ttt", e.toString())
+                        when (e) {
+                            is SQLiteException -> _toastMessage.emit("데이터 베이스 에러가 발생하였습니다.")
+                            else -> _toastMessage.emit("시스템 에러가 발생 하였습니다.")
+                        }
+                    }
+            }
+        } else {
+            userIdDoubleCheckEvent = false
+            baseViewModelScope.launch {
+                _toastMessage.emit("아이디를 입력해주세요")
+            }
+        }
+
     }
 
     // factory pattern

@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +18,7 @@ import com.example.myapplication.R
 import com.example.myapplication.adapter.CalendarAdapter
 import com.example.myapplication.adapter.MatchAdapter
 import com.example.myapplication.data.CalendarDateModel
-import com.example.myapplication.data.ReservesSportDateData
+import com.example.myapplication.data.ReservesListResponseData
 import com.example.myapplication.databinding.FragmentHomeBinding
 import com.example.myapplication.ui.detail.DetailActivity
 import com.example.myapplication.ui.search.SearchActivity
@@ -53,10 +52,17 @@ class HomeFragment : Fragment(), CalendarAdapter.ItemClickListener, MatchAdapter
         return HomeFragment()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+
+    }
+
+
     override fun onGetLayoutInflater(savedInstanceState: Bundle?): LayoutInflater {
         val inflater = super.onGetLayoutInflater(savedInstanceState)
         val contextThemeWrapper: Context =
-            ContextThemeWrapper(activity, R.style.Theme_home_OhSoonTaxiAndroid)
+            ContextThemeWrapper(activity!!.applicationContext, R.style.Theme_home_OhSoonTaxiAndroid)
         return inflater.cloneInContext(contextThemeWrapper)
     }
 
@@ -68,16 +74,18 @@ class HomeFragment : Fragment(), CalendarAdapter.ItemClickListener, MatchAdapter
         val themedInflater =
             inflater.cloneInContext(
                 ContextThemeWrapper(
-                    activity,
+                    activity!!.applicationContext,
                     R.style.Theme_home_OhSoonTaxiAndroid
                 )
             )
-
-
+//        inflater.context.setTheme(R.style.Theme_home_OhSoonTaxiAndroid)
 
 //        binding = FragmentHomeBinding.inflate(themedInflater, container, false)
         _binding = FragmentHomeBinding.inflate(themedInflater, container, false)
         binding.viewmodel = viewModel
+
+//        activity!!.window.statusBarColor = R.color.drawer_background
+        binding.lifecycleOwner = viewLifecycleOwner
 
         setUpDateAdapter()
         setUpDateClickListener()
@@ -119,17 +127,17 @@ class HomeFragment : Fragment(), CalendarAdapter.ItemClickListener, MatchAdapter
     private fun setObserver() {
         Log.d("ttt123", sdfRv.format(cal.time))
 
-        viewModel.reservesSportDateRetrofit("SOCCER", sdfRv.format(cal.time).toString())
+        viewModel.reservesDateRetrofit(sdfRv.format(cal.time).toString())
         Log.d("Ttt", "???")
 
         lifecycleScope.launchWhenStarted {
             viewModel.reservesSportDateEvent.collect {
-                Log.d("Ttt", it.reservesSportDateData.toString())
-                if (it.reservesSportDateData.isEmpty()) {
+                Log.d("Ttt", it.reservesListResponseData.toString())
+                if (it.reservesListResponseData.isEmpty()) {
                     binding.rvMatch.visibility = View.GONE
                     binding.noResultCard.visibility = View.VISIBLE
                 } else {
-                    matchAdapter.setData(it.reservesSportDateData)
+                    matchAdapter.setData(it.reservesListResponseData)
                     binding.rvMatch.visibility = View.VISIBLE
                     binding.noResultCard.visibility = View.GONE
 
@@ -229,8 +237,7 @@ class HomeFragment : Fragment(), CalendarAdapter.ItemClickListener, MatchAdapter
             calendarModel.isSelected = index == position
             if (index == position) {
                 calendarModel.isSelected = true
-                viewModel.reservesSportDateRetrofit(
-                    "SOCCER",
+                viewModel.reservesDateRetrofit(
                     sdfRv.format(calendarModel.data).toString()
                 )
 
@@ -248,7 +255,7 @@ class HomeFragment : Fragment(), CalendarAdapter.ItemClickListener, MatchAdapter
             if (result.resultCode == Activity.RESULT_OK) {
                 val id = result.data?.getStringExtra("id") ?: ""
                 val password = result.data?.getStringExtra("password") ?: ""
-                viewModel.reservesSportDateRetrofit("SOCCER", id)
+                viewModel.reservesDateRetrofit(id)
 
                 Log.d("ttt", id)
                 Log.d("ttt", password)
@@ -256,12 +263,11 @@ class HomeFragment : Fragment(), CalendarAdapter.ItemClickListener, MatchAdapter
             }
         }
 
-    override fun onItemClickListener(item: ReservesSportDateData, position: Int) {
+    override fun onItemClickListener(item: ReservesListResponseData, position: Int) {
 
         // 원하는 화면 연결
         val intent = Intent(requireActivity(), DetailActivity::class.java)
-        intent.putExtra("reserveId", item.reserveId)
-        intent.putExtra("userId", item.userId)
+        intent.putExtra("reserveId", item.id)
         registerForActivityResult.launch(intent)
 
 

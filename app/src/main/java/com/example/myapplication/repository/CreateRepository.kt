@@ -8,16 +8,16 @@ import com.example.myapplication.network.handleResult
 
 class CreateRepository(application: Application) {
 
-    suspend fun retrofitReservesEdit(reservesEdit: ReservesEdit): BaseResult<Unit> {
-        return handleResult{ RetrofitObject.getRetrofitService.postReservesEdit(reservesEdit)}
+    // 게시글 생성
+    suspend fun retrofitReservesCreation(userUid : String, reservesCreation: ReservesCreation): BaseResult<Unit> {
 
+        return handleResult{ RetrofitObject.getRetrofitService.postReservesAdd(userUid, reservesCreation)}
 
     }
 
-    suspend fun retrofitReservesCreation(reservesCreation: ReservesCreation): BaseResult<Unit> {
-
-        return handleResult{ RetrofitObject.getRetrofitService.postReservesCreation(reservesCreation)}
-
+    // 게시글 수정
+    suspend fun retrofitReservesEdit(reservesEdit: ReservesEdit, userId: String): BaseResult<Unit> {
+        return handleResult{ RetrofitObject.getRetrofitService.postReservesEdit(userId, reservesEdit)}
     }
 
 

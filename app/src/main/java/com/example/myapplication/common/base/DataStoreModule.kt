@@ -3,7 +3,6 @@ package com.example.myapplication.common.base
 import android.content.Context
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
-import com.example.myapplication.data.Promise
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -73,26 +72,26 @@ class DataStoreModule(private val context : Context) {
 
 
 
-    val promise :  Flow<Promise> = context.dataStore.data
-        .catch { exception ->
-            if (exception is IOException) {
-                emit(emptyPreferences())
-            } else {
-                throw exception
-            }
-        }
-        .map {
-
-            Promise(
-                it[TITLE] ?: "",
-                it[START_PLACE] ?: "",
-                it[DESTINATION] ?: "",
-                it[RECRUIT] ?: "",
-                it[GENDER] ?: "모집 성별",
-                it[DATE] ?: "탑승 날짜",
-                it[RESERVATION_TIME] ?: "탑승 시간",
-            )
-        }
+//    val promise :  Flow<Promise> = context.dataStore.data
+//        .catch { exception ->
+//            if (exception is IOException) {
+//                emit(emptyPreferences())
+//            } else {
+//                throw exception
+//            }
+//        }
+//        .map {
+//
+//            Promise(
+//                it[TITLE] ?: "",
+//                it[START_PLACE] ?: "",
+//                it[DESTINATION] ?: "",
+//                it[RECRUIT] ?: "",
+//                it[GENDER] ?: "모집 성별",
+//                it[DATE] ?: "탑승 날짜",
+//                it[RESERVATION_TIME] ?: "탑승 시간",
+//            )
+//        }
 
 
 }
