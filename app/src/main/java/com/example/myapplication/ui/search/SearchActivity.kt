@@ -1,7 +1,10 @@
 package com.example.myapplication.ui.search
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -9,11 +12,16 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.R
+import com.example.myapplication.adapter.MatchAdapter
+import com.example.myapplication.adapter.MyReservesAdapter
 import com.example.myapplication.databinding.ActivitySearchBinding
 import com.example.myapplication.common.utils.textChangesToFlow
+import com.example.myapplication.data.ReservesListResponseData
+import com.example.myapplication.ui.detail.DetailActivity
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -24,13 +32,21 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class SearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class SearchActivity : AppCompatActivity(), MatchAdapter.ItemClickListener {
     private val binding by lazy { ActivitySearchBinding.inflate(layoutInflater) }
-    private var myCoroutineJob : Job = Job()
+    private var myCoroutineJob: Job = Job()
     private val myCoroutineContext: CoroutineContext
         get() = Dispatchers.IO + myCoroutineJob
-    private val viewModel by lazy { ViewModelProvider(this, SearchViewModel.Factory(application))[SearchViewModel::class.java] }
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this,
+            SearchViewModel.Factory(application)
+        )[SearchViewModel::class.java]
+    }
 //    private lateinit var retrofitAdapter: SearchAdapter
+
+    private lateinit var matchAdapter: MatchAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,8 +75,8 @@ class SearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-//        setView() // 리사이클러 뷰 연결
-//        setObserver() // 뷰모델을 관찰합니다.
+        setMatchView() // 리사이클러 뷰 연결
+        setObserver() // 뷰모델을 관찰합니다.
 
         /**
          * coroutine flow debounce 통해 반응형 프로그래밍 구현
@@ -83,7 +99,7 @@ class SearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             }
 
 
-            lifecycleScope.launch(context = myCoroutineContext){
+            lifecycleScope.launch(context = myCoroutineContext) {
 
                 // editText 가 변경되었을때
                 val editTextFlow = binding.etSearchField.textChangesToFlow()
@@ -102,14 +118,13 @@ class SearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                         lifecycleScope.launch {
 
 
-                            if (!it.isNullOrBlank()){
+                            if (!it.isNullOrBlank()) {
                                 viewModel.getReservesSearchListRetrofit(it.toString())
 
-                            }else{
+                            } else {
                                 binding.rvList.visibility = View.GONE
                                 binding.noResultCard.visibility = View.VISIBLE
                                 binding.textClearButton.visibility = View.GONE
-
 
 
                             }
@@ -125,7 +140,7 @@ class SearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         // 검색창 엔터
         binding.etSearchField.setOnKeyListener { _, keyCode, event ->
 
-            if ((event.action== KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            if ((event.action == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 // 엔터가 눌릴 때 하고 싶은 일
                 binding.etSearchField.clearFocus()
                 imm.hideSoftInputFromWindow(binding.etSearchField.windowToken, 0)
@@ -147,36 +162,35 @@ class SearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     }
 
 
-//    private fun setView(){
-//        retrofitAdapter =  SearchAdapter(this).apply {
-//            setHasStableIds(true) // 리사이클러 뷰 업데이트 시 깜빡임 방지
-//        }
-//        binding.rvList.adapter = retrofitAdapter
-//    }
+    private fun setMatchView() {
+        matchAdapter = MatchAdapter(this, applicationContext).apply {
+            setHasStableIds(true) // 리사이클러 뷰 업데이트 시 깜빡임 방지
+        }
+        binding.rvList.adapter = matchAdapter
+    }
 
-//    private fun setObserver() {
-//        viewModel.retrofitSearchList.observe(this, {
-//
-//            viewModel.retrofitSearchList.value?.let { it1 -> retrofitAdapter.setData(it1)
-//
-//                if (it1.hashtagNameItem.size == 0){
-//                    binding.rvList.visibility = View.GONE
-//                    binding.noResultCard.visibility = View.VISIBLE
-//                }else{
-//                    binding.rvList.visibility = View.VISIBLE
-//                    binding.noResultCard.visibility = View.GONE
-//                    binding.textClearButton.visibility = View.VISIBLE
-//                }
-//            }
-//
-//        })
-//
-//    }
+    private fun setObserver() {
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.retrofitReservesListResponseEvent.collect {
+                if (it.reservesListResponseData.isEmpty()) {
+                    binding.rvList.visibility = View.GONE
+                    binding.noResultCard.visibility = View.VISIBLE
+                } else {
+                    matchAdapter.setData(it.reservesListResponseData)
+                    binding.rvList.visibility = View.VISIBLE
+                    binding.noResultCard.visibility = View.GONE
+
+                }
+
+            }
+        }
+    }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            android.R.id.home->{ // 메뉴 버튼
+        when (item.itemId) {
+            android.R.id.home -> { // 메뉴 버튼
                 finish()
             }
         }
@@ -209,13 +223,30 @@ class SearchActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     }
 
 
+    private val registerForActivityResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val id = result.data?.getStringExtra("id") ?: ""
+                val password = result.data?.getStringExtra("password") ?: ""
+
+                Log.d("ttt", id)
+                Log.d("ttt", password)
+
+            }
+        }
+
+
+    override fun onItemClickListener(item: ReservesListResponseData, position: Int) {
+        // 원하는 화면 연결
+        val intent = Intent(this@SearchActivity, DetailActivity::class.java)
+        intent.putExtra("reserveId", item.id)
+        registerForActivityResult.launch(intent)
+    }
+
+
     override fun onDestroy() {
         myCoroutineContext.cancel()  // MemoryLeak 방지를 위해 myCoroutineContext 해제
         super.onDestroy()
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        TODO("Not yet implemented")
     }
 
 }

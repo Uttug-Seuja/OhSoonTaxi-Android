@@ -5,8 +5,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.lifecycle.lifecycleScope
+import com.example.myapplication.NavHostActivity
+import com.example.myapplication.common.GlobalApplication
 import com.example.myapplication.databinding.ActivitySplashBinding
+import com.example.myapplication.network.RetrofitObject
 import com.example.myapplication.ui.signin.SigninActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
     private val binding by lazy { ActivitySplashBinding.inflate(layoutInflater) }
@@ -20,23 +27,30 @@ class SplashActivity : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
 
-//            val memberId = MyApplication.prefs.getString("memberId", "")
+            lifecycleScope.launch {
+                GlobalApplication.getInstance().getDataStore().userUid.collect { it ->
+                    if (it != "") {
+                        val intent = Intent(this@SplashActivity, NavHostActivity::class.java)
+                        startActivity(intent)
+                        finish()
+
+                    } else {
+
+                        val intent = Intent(this@SplashActivity, SigninActivity::class.java)
+                        startActivity(intent)
+                        finish()
+
+                    }
+                }
+
+
+            }
+
             /**
              * 이미 로그인이 되어 있을 수도 있기 때문에 !!!!!!!!!!
              * 로그인을 해본다!!!!!!!!!
              * */
-//            if (memberId != ""){
-//                val intent = Intent(this, MainActivity::class.java)
-//                startActivity(intent)
-//                finish()
-//
-//            }else{
 
-                val intent = Intent(this, SigninActivity::class.java)
-                startActivity(intent)
-                finish()
-
-//            }
 
         }, 500)
     }

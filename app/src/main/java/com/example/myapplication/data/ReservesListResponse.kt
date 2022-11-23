@@ -8,7 +8,7 @@ data class ReservesListResponse(@SerializedName("data") val reservesListResponse
 data class ReservesListResponseData(
     @SerializedName("id") val id: Int,
     @SerializedName("title") val title: String,
-    @SerializedName("reserveTime") val reserveTime: String,
+    @SerializedName("reservationTime") val reservationTime: String,
     @SerializedName("startingPlace") val startingPlace: String,
     @SerializedName("destination") val destination: String,
     @SerializedName("sex") val sex: String,

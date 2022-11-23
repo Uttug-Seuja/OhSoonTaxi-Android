@@ -4,5 +4,7 @@ sealed class MyInfoNavigationAction {
     object NavigateToMyCreate: MyInfoNavigationAction()
     object NavigateToMyUsage: MyInfoNavigationAction()
     object NavigateToMyInterest: MyInfoNavigationAction()
+    object NavigateToSignIn: MyInfoNavigationAction()
+
 
 }

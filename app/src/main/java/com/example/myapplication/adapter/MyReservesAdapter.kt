@@ -9,12 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.data.CalendarDateModel
 import com.example.myapplication.data.ReservesListResponseData
 import com.example.myapplication.databinding.ItemRecyclerPromiseBinding
-import com.example.myapplication.ui.my_info.my_create.MyCreateActivity
-import com.example.myapplication.ui.my_info.my_usage.MyUsageActivity
-import kotlin.collections.ArrayList
 
-class MatchAdapter(val onClickListener: ItemClickListener, val context: Context) :
-    RecyclerView.Adapter<MatchAdapter.ViewHolder>() {
+class MyReservesAdapter (val onClickListener: ItemClickListener, val context: Context) :
+    RecyclerView.Adapter<MyReservesAdapter.ViewHolder>() {
     private var items = ArrayList<ReservesListResponseData>()
     private val gender =
         hashMapOf<String, String>("ALL" to "남녀모두", "MAN" to "남자만", "WOMAN" to "여자만")

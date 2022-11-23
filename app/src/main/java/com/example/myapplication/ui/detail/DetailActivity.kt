@@ -23,10 +23,14 @@ import com.example.myapplication.NavHostActivity
 import com.example.myapplication.R
 import com.example.myapplication.adapter.CustomBalloonAdapter
 import com.example.myapplication.adapter.MarkerEventListener
+import com.example.myapplication.common.GlobalApplication
+import com.example.myapplication.data.Participation
 import com.example.myapplication.data.Participations
 import com.example.myapplication.databinding.ActivityDetailBinding
+import com.example.myapplication.ui.signin.SigninActivity
 import com.example.myapplication.ui.update.UpdateActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.coroutines.launch
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -47,7 +51,7 @@ class DetailActivity : AppCompatActivity() {
     }
     private val eventListener = MarkerEventListener(this)   // 마커 클릭 이벤트 리스너
     private var bottomSheetDialog: BottomSheetDialog? = null
-    private val seatAnswerList = mutableListOf<Boolean>(false, false, false, false)
+    private var seatAnswerList = mutableListOf<Boolean>(false, false, false, false)
     private var seatAnswer = -1
     private var reserveDate: String? = null
     private val gender =
@@ -73,7 +77,8 @@ class DetailActivity : AppCompatActivity() {
     private var currentNum: Int? = null
     private var challengeWord: String? = null
     private var countersignWord: String? = null
-    private var reserveId: String? = null
+    private var reserveId: Int? = null
+    private var userUid: String? = null
 
 
     private val seatSelectButton = mutableListOf(
@@ -95,9 +100,18 @@ class DetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true) // 드로어를 꺼낼 홈 버튼 활성화
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_previous) // 홈버튼 이미지 변경
         supportActionBar?.setDisplayShowTitleEnabled(false) // 툴바에 타이틀 안보이게
-        reserveId = intent.getIntExtra("reserveId", 0).toString()
+        reserveId = intent.getIntExtra("reserveId", 0)
+
+        Log.d("Ttt", reserveId!!.toInt().toString())
+        lifecycleScope.launch {
+            GlobalApplication.getInstance().getDataStore().userUid.collect { it ->
+                userUid = it
+
+            }
+        }
 
         viewModel.reservesRetrofit(reserveId!!.toInt())
+        viewModel.getParticipationCheckRetrofit(reserveId!!.toInt(), userUid!!)
 
         lifecycleScope.launchWhenStarted {
             viewModel.retrofitReservesEvent.collect {
@@ -108,7 +122,7 @@ class DetailActivity : AppCompatActivity() {
 
 
                 binding.mainToolbarText.text = "${it.startingPlace} -> ${it.destination}"
-                binding.nameText.text = "${it.name}(${gender[it.sex]})"
+                binding.nameText.text = "${it.name}(${gender[it.userSex]})"
                 binding.schoolNumText.text = "${it.schoolNum.substring(2, 4)}학번"
                 binding.titleText.text = it.title
                 binding.createdAtText.text = "$createdAtSplitDate $createdAtSplitTime"
@@ -129,17 +143,27 @@ class DetailActivity : AppCompatActivity() {
                 reserveDate = it.reserveDate
                 selectSeatPosition = it.participations
                 makeMap()
-                makeBottomSheetView()
+
+                Log.d("ttt it.participations", it.participations.toString())
+                Log.d("ttt selectSeatPosition", selectSeatPosition.toString())
 
 
-                binding.applyBtn.setCardBackgroundColor(Color.parseColor(stateBtnColor[it.reservationStatus]))
-                binding.applyText.text = reserveStatus[it.reservationStatus]
-                binding.applyText.setTextColor(Color.parseColor(stateTextColor[it.reservationStatus]))
+
 
                 challengeWord = it.challengeWord
                 countersignWord = it.countersignWord
 
 
+                lifecycleScope.launchWhenStarted {
+                    viewModel.participationCheckEvent.collect {
+                        when (it) {
+                            "신청하기" -> makeBottomSheetView()
+                            "암구호 조회" -> passphraseDialogCreate()
+                            "참여 취소하기" -> deleteParticipationBtn()
+                            "마감" -> participationBtn()
+                        }
+                    }
+                }
             }
         }
 
@@ -167,6 +191,7 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun makeMap() {
         val customBalloonAdapter = CustomBalloonAdapter(layoutInflater)
 
@@ -204,16 +229,32 @@ class DetailActivity : AppCompatActivity() {
 
 
     private fun makeBottomSheetView() {
+
+        Log.d("ttt", "들어오면 안돼")
+
+        binding.applyBtn.setCardBackgroundColor(Color.parseColor(stateBtnColor["POSSIBLE"]))
+        binding.applyText.text = reserveStatus["POSSIBLE"]
+        binding.applyText.setTextColor(Color.parseColor(stateTextColor["POSSIBLE"]))
+
         val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_seat_layout, null)
         bottomSheetDialog = BottomSheetDialog(this)
         bottomSheetDialog!!.setContentView(bottomSheetView)
 
-        selectSeatPosition!!.forEach {
-            seatAnswerList[it.seatPosition] = true
-            bottomSheetView.findViewById<TextView>(seatSelectButton[it.seatPosition]).text =
-                "${it.schoolNum.substring(2, 4)}학번\n${it.name}"
+        Log.d("ttt makeBottomSheetView", selectSeatPosition.toString())
+
+        if (selectSeatPosition!!.size != 0){
+            selectSeatPosition!!.forEach {
+                seatAnswerList[it.seatPosition] = true
+                bottomSheetView.findViewById<TextView>(seatSelectButton[it.seatPosition]).text =
+                    "${it.schoolNum.substring(2, 4)}학번\n${it.name}"
+            }
+
+        }else{
+            seatAnswerList = mutableListOf<Boolean>(false, false, false, false)
 
         }
+
+
 
 
         binding.applyBtn.setOnClickListener {
@@ -326,33 +367,53 @@ class DetailActivity : AppCompatActivity() {
         }
 
 
-        // 좌석 선택 및 암구호 확인 버튼
+        // 좌석 선택 버튼
         bottomSheetView.findViewById<View>(R.id.seat_answer_btn).setOnClickListener {
-            seatAnswer // 사용자가 선택한 좌석
-            bottomSheetDialog!!.dismiss()
+            if (seatAnswer == -1) {
+                Toast.makeText(this@DetailActivity, "좌석을 선택해주세요.", Toast.LENGTH_SHORT).show()
+            } else {
+                Log.d("Ttt seatAnswer", seatAnswer.toString())
+                bottomSheetDialog!!.dismiss()
+                viewModel.postParticipationRetrofit(userUid!!, Participation(reserveId!!, seatAnswer))
 
-            viewModel.getParticipationCheckRetrofit(reserveId!!.toInt(), "jo")
-
-            lifecycleScope.launchWhenStarted {
-                viewModel.navigationEvent.collect {
-                    when (it) {
-                        is DetailNavigationAction.NavigateToBackNav -> {
-                            val intent = Intent(this@DetailActivity, NavHostActivity::class.java)
-                            intent.putExtra("id", reserveDate)
-                            intent.putExtra("password", "이건희")
-                            setResult(RESULT_OK, intent)
-                            finish()
-                        }
-                    }
-                }
             }
 
-            val intent = Intent(this@DetailActivity, PassphraseDialog::class.java)
+
+        }
+    }
+
+    private fun deleteParticipationBtn() {
+        Log.d("Ttt", "참여 취소하기 잘 들어옴")
+        binding.applyText.text = "취소하기"
+        binding.applyBtn.setCardBackgroundColor(Color.parseColor("#FF4D37"))
+        binding.applyBtn.setOnClickListener {
+            viewModel.deleteParticipationRetrofit(reserveId!!.toInt(), userUid!!)
+
+        }
+    }
+
+    private fun participationBtn() {
+        Log.d("Ttt", "마감 잘 들어옴")
+        binding.applyText.text = "마감"
+        binding.applyBtn.setCardBackgroundColor(Color.parseColor("#FF4D37"))
+        binding.applyBtn.isClickable = false
+    }
+
+    private fun passphraseDialogCreate() {
+
+        binding.applyText.text = "암구호 확인"
+        binding.applyBtn.setCardBackgroundColor(Color.parseColor("#FF4D37"))
+
+
+
+        binding.applyBtn.setOnClickListener {
+//            val intent = Intent(this@DetailActivity, PassphraseDialog::class.java)
             intent.putExtra("challengeWord", challengeWord)
             intent.putExtra("countersignWord", countersignWord)
             startActivity(intent)
 
         }
+
     }
 
     // 검색 결과 처리 함수
@@ -485,7 +546,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        val intent = Intent(this@DetailActivity, NavHostActivity::class.java)
+//        val intent = Intent(this@DetailActivity, NavHostActivity::class.java)
         intent.putExtra("id", reserveDate)
         intent.putExtra("password", "이건희")
         setResult(RESULT_OK, intent)

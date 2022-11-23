@@ -38,8 +38,15 @@ interface RetrofitInterface {
     @Headers("Content-Type: application/json")
     @POST(API.POST_USERS_SIGN_OUT)
     suspend fun postUserSignOut(
-        @Query("uid") uid: String,
+        @Query("userUid") userUid: String,
     )
+
+    // 내 정보 보기
+    @Headers("Content-Type: application/json")
+    @GET(API.GET_USERS_MY_INFO)
+    suspend fun getUserMyInfo(
+        @Query("userUid") userUid: String,
+    ): MyInfoResponse
 
     /**Reservation*/
     // 약속 생성
@@ -83,14 +90,14 @@ interface RetrofitInterface {
 
     // 내가 만든 게시글 조회
     @Headers("Content-Type: application/json")
-    @POST(API.GET_RESERVES_LIST_RESERVATIONS)
+    @GET(API.GET_RESERVES_LIST_RESERVATIONS)
     suspend fun getReservesListReservations(
         @Query("userUid") userUid: String,
     ): ReservesListResponse
 
     // 내가 참여한 게시글 조회
     @Headers("Content-Type: application/json")
-    @POST(API.GET_RESERVES_LIST_PARTICIPATIONS)
+    @GET(API.GET_RESERVES_LIST_PARTICIPATIONS)
     suspend fun getReservesListParticipations(
         @Query("userUid") userUid: String,
     ): ReservesListResponse
@@ -109,7 +116,7 @@ interface RetrofitInterface {
         @Query("keyword") keyword: String
     ): ReservesListResponse
 
-    /**Reservation*/
+    /**Participation*/
     // 참가 신청
     @Headers("Content-Type: application/json")
     @POST(API.POST_PARTICIPATION_ADD)
@@ -122,16 +129,16 @@ interface RetrofitInterface {
     @Headers("Content-Type: application/json")
     @HTTP(method = "DELETE", path = API.DELETE_PARTICIPATION, hasBody = true)
     suspend fun deleteParticipation(
-        @Query("userUid") userUid: String,
         @Path("reservationId") reservationId: Int,
-    )
+        @Query("userUid") userUid: String,
+
+        )
 
     // 참여 확인 조회
     @Headers("Content-Type: application/json")
     @GET(API.GET_PARTICIPATION_CHECK)
     suspend fun getParticipationCheck(
         @Path("reservationId") reservationId: Int,
-
         @Query("userUid") userUid: String,
-    ) : String
+    ): ParticipationCheckResponse
 }

@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.R
+import com.example.myapplication.common.GlobalApplication
 import com.example.myapplication.databinding.FragmentHomeBinding
 import com.example.myapplication.databinding.FragmentMyInfoBinding
 import com.example.myapplication.ui.home.HomeFragment
@@ -22,11 +23,15 @@ import com.example.myapplication.ui.my_info.my_interest.MyInterestActivity
 import com.example.myapplication.ui.my_info.my_usage.MyUsageActivity
 import com.example.myapplication.ui.search.SearchActivity
 import com.example.myapplication.ui.search.SearchViewModel
+import com.example.myapplication.ui.signin.SigninActivity
+import kotlinx.coroutines.launch
 
 class MyInfoFragment : Fragment() {
 
     private var _binding: FragmentMyInfoBinding? = null
     private val binding get() = _binding!!
+    private var userUid: String? = null
+
     private val viewModel by lazy {
         ViewModelProvider(
             this,
@@ -54,6 +59,44 @@ class MyInfoFragment : Fragment() {
         _binding = FragmentMyInfoBinding.inflate(inflater, container, false)
         binding.viewmodel = viewModel
 
+        lifecycleScope.launch {
+            GlobalApplication.getInstance().getDataStore().userUid.collect { it ->
+                userUid = it
+
+            }
+        }
+
+        viewModel.retrofitGetUserMyInfo(userUid!!)
+
+        binding.logoutBtn.setOnClickListener {
+            viewModel.postUserSignOutRetrofit(userUid!!)
+            lifecycleScope.launch {
+                GlobalApplication.getInstance().getDataStore()
+                    .setUserUid("")
+
+            }
+
+            lifecycleScope.launch {
+                GlobalApplication.getInstance().getDataStore()
+                    .setAuthorization("")
+
+            }
+
+            lifecycleScope.launch {
+                GlobalApplication.getInstance().getDataStore()
+                    .setRefreshToken("")
+
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.retrofitGetMyInfoEvent.collect {
+                binding.titleText.text = it.myInfoResponseData.name
+                binding.subTitleText.text =
+                    "${it.myInfoResponseData.sex} #${it.myInfoResponseData.schoolNum}"
+            }
+        }
+
         lifecycleScope.launchWhenStarted {
             viewModel.toastMessage.collect { message ->
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -75,12 +118,17 @@ class MyInfoFragment : Fragment() {
                         val intent = Intent(activity, MyInterestActivity::class.java)
                         startActivity(intent)
                     }
+                    is MyInfoNavigationAction.NavigateToSignIn -> {
+                        val intent = Intent(activity, SigninActivity::class.java)
+                        startActivity(intent)
+                        activity?.supportFragmentManager?.beginTransaction()
+                            ?.remove(this@MyInfoFragment)?.commit()
+                    }
                 }
             }
         }
 
         return binding.root
-
 
     }
 }

@@ -21,6 +21,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/mainToolbar"
+            android:background="#4bb3e6"
             android:elevation="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -39,10 +40,6 @@
 
 
         </androidx.appcompat.widget.Toolbar>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1.5dp"
-            android:background="#eeeeee"/>
 
         <ScrollView
             android:layout_width="match_parent"

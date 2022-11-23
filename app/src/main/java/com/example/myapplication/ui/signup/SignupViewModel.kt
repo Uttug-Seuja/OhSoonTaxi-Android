@@ -3,6 +3,7 @@ package com.example.myapplication.ui.signup
 import android.app.Application
 import android.database.sqlite.SQLiteException
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -49,7 +50,7 @@ class SignupViewModel(private val repository: UserRepository) : BaseViewModel() 
             baseViewModelScope.launch {
                 repository.retrofitSignUp(signup)
                     .onSuccess {
-
+                        _toastMessage.emit("회원가입을 성공적으로 했습니다")
                         _navigationEvent.emit(SignupNavigationAction.NavigateToSignIn)
                     }
                     .onError { e ->
@@ -77,14 +78,14 @@ class SignupViewModel(private val repository: UserRepository) : BaseViewModel() 
                 Log.d("Ttt", userIdEvent.value)
                 repository.retrofitPostUsersCheckUnique(userIdEvent.value)
                     .onSuccess {
-
+                        _toastMessage.emit("아이디를 사용할 수 있습니다.")
                         userIdDoubleCheckEvent = true
                     }
                     .onError { e ->
                         Log.d("ttt", e.toString())
                         when (e) {
                             is SQLiteException -> _toastMessage.emit("데이터 베이스 에러가 발생하였습니다.")
-                            else -> _toastMessage.emit("시스템 에러가 발생 하였습니다.")
+                            else -> _toastMessage.emit("아이디를 사용할 수 없습니다.")
                         }
                     }
             }

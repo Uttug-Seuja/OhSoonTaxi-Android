@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="5dp"
+        android:background="#4bb3e6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -74,17 +75,17 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/title_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="조준장"
                         android:textColor="@color/black"
                         android:textSize="16dp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/sub_title_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="남자 #20181566"
                         android:textSize="12dp" />
 
 
@@ -518,6 +519,7 @@
                 android:background="#eeeeee" />
 
             <RelativeLayout
+                android:id="@+id/logout_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -532,7 +534,7 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginBottom="20dp"
-                    android:text="개발자"
+                    android:text="로그아웃"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 

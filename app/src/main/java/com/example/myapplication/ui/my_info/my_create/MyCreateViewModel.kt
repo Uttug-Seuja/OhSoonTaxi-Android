@@ -26,10 +26,10 @@ class MyCreateViewModel(private val repository: MyInfoRepository) : BaseViewMode
 
 
     // 내가 만든 게시글 조회
-    fun getReservesListReservationsRetrofit(keyword : String) = viewModelScope.launch {
+    fun reservesListReservationsRetrofit(userUid : String) = viewModelScope.launch {
 
         baseViewModelScope.launch {
-            repository.retrofitGetReservesListReservations(keyword)
+            repository.retrofitGetReservesListReservations(userUid)
                 .onSuccess {
                     _retrofitReservesListResponseEvent.emit(it)
                 }

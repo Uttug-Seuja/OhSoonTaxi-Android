@@ -26,6 +26,7 @@ fun ReservesResponseData.toDomain(): ReservesResponseData {
         startingPlace = this.startingPlace,
         destination = this.destination,
         sex = this.sex,
+        userSex = this.userSex,
         createdAt = this.createdAt,
         currentNum = this.currentNum,
         passengerNum = this.passengerNum,

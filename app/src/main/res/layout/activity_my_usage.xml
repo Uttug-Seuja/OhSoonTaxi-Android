@@ -21,6 +21,7 @@
             android:id="@+id/mainToolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#4bb3e6"
             android:elevation="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -37,12 +38,6 @@
 
 
         </androidx.appcompat.widget.Toolbar>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:background="#eeeeee" />
-
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_list"

@@ -19,6 +19,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/mainToolbar"
+            android:background="#4bb3e6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="5dp"
@@ -37,12 +38,6 @@
 
 
         </androidx.appcompat.widget.Toolbar>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:background="#eeeeee" />
-
 
         <androidx.cardview.widget.CardView
             android:id="@+id/searchViewLayout"

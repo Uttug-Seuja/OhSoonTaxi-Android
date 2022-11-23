@@ -11,6 +11,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/mainToolbar"
+        android:background="#4bb3e6"
         android:elevation="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,10 +30,6 @@
 
 
     </androidx.appcompat.widget.Toolbar>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="15dp"
-        android:background="#eeeeee"/>
 
     <LinearLayout
         android:id="@+id/gender_all_btn"

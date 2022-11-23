@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.common.base.BaseViewModel
+import com.example.myapplication.data.MyInfoResponse
 import com.example.myapplication.data.ReservesListResponse
 import com.example.myapplication.network.onError
 import com.example.myapplication.network.onSuccess
@@ -21,8 +22,8 @@ class MyInfoViewModel(private val repository: MyInfoRepository) : BaseViewModel(
     private val _navigationEvent: MutableSharedFlow<MyInfoNavigationAction> = MutableSharedFlow()
     val navigationEvent: SharedFlow<MyInfoNavigationAction> = _navigationEvent
 
-    private val _retrofitPostSignOutEvent: MutableSharedFlow<String> = MutableSharedFlow()
-    val retrofitPostSignOutEvent: SharedFlow<String> = _retrofitPostSignOutEvent
+    private val _retrofitGetMyInfoEvent: MutableSharedFlow<MyInfoResponse> = MutableSharedFlow()
+    val retrofitGetMyInfoEvent: SharedFlow<MyInfoResponse> = _retrofitGetMyInfoEvent
 
 
     fun onClickedMyCreate() {
@@ -41,13 +42,32 @@ class MyInfoViewModel(private val repository: MyInfoRepository) : BaseViewModel(
         }
     }
 
-    // 내가 신청한 게시글
+    // 내 정보
+    fun retrofitGetUserMyInfo(userUid : String) = viewModelScope.launch {
+
+        baseViewModelScope.launch {
+            repository.retrofitGetUserMyInfo(userUid)
+                .onSuccess {
+                    _retrofitGetMyInfoEvent.emit(it)
+                }
+                .onError { e ->
+                    Log.d("ttt", e.toString())
+                    when (e) {
+                        is SQLiteException -> _toastMessage.emit("데이터 베이스 에러가 발생하였습니다.")
+                        else -> _toastMessage.emit("시스템 에러가 발생 하였습니다.")
+                    }
+                }
+        }
+    }
+
+    // 로그아웃
     fun postUserSignOutRetrofit(userUid : String) = viewModelScope.launch {
 
         baseViewModelScope.launch {
             repository.retrofitPostUserSignOut(userUid)
                 .onSuccess {
-                    _retrofitPostSignOutEvent.emit("")
+                    _navigationEvent.emit(MyInfoNavigationAction.NavigateToSignIn)
+
                 }
                 .onError { e ->
                     Log.d("ttt", e.toString())

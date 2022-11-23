@@ -25,7 +25,7 @@ class MyUsageViewModel(private val repository: MyInfoRepository) : BaseViewModel
     }
 
     // 내가 신청한 게시글
-    fun getReservesListParticipationsRetrofit(userUid : String) = viewModelScope.launch {
+    fun reservesListParticipationsRetrofit(userUid : String) = viewModelScope.launch {
 
         baseViewModelScope.launch {
             repository.retrofitGetReservesListParticipations(userUid)

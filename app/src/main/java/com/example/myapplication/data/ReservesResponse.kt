@@ -12,6 +12,7 @@ data class ReservesResponseData(
     @SerializedName("startingPlace") val startingPlace: String,
     @SerializedName("destination") val destination: String,
     @SerializedName("sex") val sex: String,
+    @SerializedName("userSex") val userSex: String,
     @SerializedName("createdAt") val createdAt: String,
     @SerializedName("currentNum") val currentNum: Int,
     @SerializedName("passengerNum") val passengerNum: Int,

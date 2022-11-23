@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.myapplication.NavHostActivity
+import com.example.myapplication.common.GlobalApplication
 import com.example.myapplication.common.base.BaseViewModel
 import com.example.myapplication.data.Login
 import com.example.myapplication.data.*
@@ -37,20 +38,19 @@ class SigninViewModel(private val repository: UserRepository) : BaseViewModel() 
             baseViewModelScope.launch {
                 repository.retrofitSignIn(signIn)
                     .onSuccess {
-                        Log.d("ttt", it.toString())
-
+                        baseViewModelScope.launch {
+                            GlobalApplication.getInstance().getDataStore()
+                                .setUserUid(loginIdEvent.value)
+                        }
                         _navigationEvent.emit(SignInNavigationAction.NavigateToHome)
                     }
                     .onError { e ->
-                        Log.d("ttt", e.toString())
                         when (e) {
                             is SQLiteException -> _toastMessage.emit("데이터 베이스 에러가 발생하였습니다.")
-                            else -> _toastMessage.emit("시스템 에러가 발생 하였습니다.")
+                            else -> _toastMessage.emit("아이디 또는 비밀번호가 틀립니다")
                         }
                     }
             }
-
-
         } else {
             baseViewModelScope.launch {
                 _toastMessage.emit("아이디와 비밀번호를 작성해주세요")

@@ -1,10 +1,14 @@
 package com.example.myapplication.network
 
 import android.util.Log
+import com.example.myapplication.common.GlobalApplication
 import com.example.myapplication.common.utils.API
 import com.example.myapplication.common.utils.API.POST_USERS_CHECK_UNIQUE
 import com.example.myapplication.common.utils.API.POST_USERS_SIGNIN
 import com.example.myapplication.common.utils.API.POST_USERS_SIGNUP
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -12,8 +16,22 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object RetrofitObject {
-    var authorizationToken: String = ""
-    var refreshToken: String = ""
+    private var authorizationToken: String = ""
+    private var refreshToken: String = ""
+
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            GlobalApplication.getInstance().getDataStore().authorization.collect { it ->
+                authorizationToken = it
+            }
+        }
+
+        CoroutineScope(Dispatchers.IO).launch{
+            GlobalApplication.getInstance().getDataStore().refreshToken.collect { it ->
+                refreshToken = it
+            }
+        }
+    }
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().apply {
@@ -22,21 +40,35 @@ object RetrofitObject {
         .addInterceptor {
 
             val original = it.request()
-            if (original.url.encodedPath.equals(POST_USERS_SIGNUP, true)
-                || original.url.encodedPath.equals(POST_USERS_SIGNIN, true)
-                || original.url.encodedPath.equals(POST_USERS_CHECK_UNIQUE, true)
-            ) {
-
+            if (original.url.encodedPath.equals(POST_USERS_SIGNIN, true)) {
                 val response = it.proceed(original)
 
-                Log.d("tttdasd1111", response.toString())
-                Log.d("tttdasd2222", response.headers["Authorization"].toString())
-                authorizationToken = response.headers["Authorization"].toString()
-                refreshToken = response.headers["RefreshToken"].toString()
+                CoroutineScope(Dispatchers.IO).launch {
+                    GlobalApplication.getInstance().getDataStore()
+                        .setAuthorization(response.headers["Authorization"].toString())
+                }
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    GlobalApplication.getInstance().getDataStore()
+                        .setRefreshToken(response.headers["RefreshToken"].toString())
+
+                }
+
+                Log.d("tttdasd1123", authorizationToken)
+                Log.d("tttdasd2123", refreshToken)
+
+                response
+            } else if (original.url.encodedPath.equals(POST_USERS_CHECK_UNIQUE, true)
+            ) {
+
+
+                val response = it.proceed(original)
                 response
 
             } else {
 
+                Log.d("tttdasd1", authorizationToken)
+                Log.d("tttdasd2", refreshToken)
                 val request = original.newBuilder().apply {
                     addHeader("Authorization", authorizationToken)
                         .addHeader("RefreshToken", refreshToken)
@@ -44,8 +76,7 @@ object RetrofitObject {
 
                 val response = it.proceed(request)
 
-                Log.d("tttdasd1", response.toString())
-                Log.d("tttdasd2", response.headers.toString())
+
 
                 response
             }

@@ -20,6 +20,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/mainToolbar"
+            android:background="#4bb3e6"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize">
 
@@ -650,7 +651,6 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginBottom="10dp"
                     android:gravity="center"
-                    android:text="좌석선택"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="18dp" />

@@ -33,9 +33,9 @@ class UserRepository(application: Application) {
     // 아이디 중복확인
     suspend fun retrofitPostUsersCheckUnique(uid: String): BaseResult<Unit> {
 
-//        Log.d("tttt", handleResult {
-//            RetrofitObject.getRetrofitService.postUsersCheckUnique(uid)
-//        }.toString())
+        Log.d("tttt", handleResult {
+            RetrofitObject.getRetrofitService.postUsersCheckUnique(uid)
+        }.toString())
         return handleResult {
             RetrofitObject.getRetrofitService.postUsersCheckUnique(uid)
         }

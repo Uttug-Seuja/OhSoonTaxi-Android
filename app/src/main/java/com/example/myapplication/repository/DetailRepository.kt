@@ -12,31 +12,63 @@ class DetailRepository(application: Application) {
 
     // 경기 정보
     suspend fun retrofitReserves(reservationId: Int): BaseResult<ReservesResponseData> {
-        return handleResult{ RetrofitObject.getRetrofitService.getReserves(reservationId).reservesResponseData.toDomain()}
+        return handleResult { RetrofitObject.getRetrofitService.getReserves(reservationId).reservesResponseData.toDomain() }
     }
 
     // 경기 삭제
     suspend fun retrofitDeleteReserves(userUid: String, reserveId: Int): BaseResult<Unit> {
-        return handleResult{ RetrofitObject.getRetrofitService.deleteReserves(userUid, reserveId)}
+        return handleResult { RetrofitObject.getRetrofitService.deleteReserves(userUid, reserveId) }
     }
 
     // 경기 상태
-    suspend fun retrofitGetParticipationCheck(reservationId: Int, userUid: String): BaseResult<Unit> {
-        return handleResult{ RetrofitObject.getRetrofitService.getParticipationCheck(reservationId, userUid)}
+    suspend fun retrofitGetParticipationCheck(
+        reservationId: Int,
+        userUid: String
+    ): BaseResult<String> {
+        return handleResult {
+            RetrofitObject.getRetrofitService.getParticipationCheck(
+                reservationId,
+                userUid
+            ).participationCheckResponse
+        }
     }
 
     // 경기 참여
-    suspend fun retrofitPostParticipation(userId: String, participation: Participation): BaseResult<Unit> {
-        return handleResult{ RetrofitObject.getRetrofitService.postParticipationAdd(userId, participation)}
+    suspend fun retrofitPostParticipation(
+        userId: String,
+        participation: Participation
+    ): BaseResult<Unit> {
+        return handleResult {
+            RetrofitObject.getRetrofitService.postParticipationAdd(
+                userId,
+                participation
+            )
+        }
     }
 
     // 경기 참여 취소
-    suspend fun retrofitDeleteParticipation(userUid: String, reservationId: Int): BaseResult<Unit> {
-        return handleResult{ RetrofitObject.getRetrofitService.deleteParticipation(userUid, reservationId)}
+    suspend fun retrofitDeleteParticipation(
+        reservationId: Int,
+        userUid: String,
+    ): BaseResult<Unit> {
+        return handleResult {
+            RetrofitObject.getRetrofitService.deleteParticipation(
+                reservationId,
+                userUid
+            )
+        }
     }
 
-    suspend fun retrofitGetReservesPassphrase(userId: String, reserveId: Int): BaseResult<PassphraseResponse> {
-        return handleResult{ RetrofitObject.getRetrofitService.getReservesPassphrase(userId, reserveId)}
+    suspend fun retrofitGetReservesPassphrase(
+        userId: String,
+        reserveId: Int
+    ): BaseResult<PassphraseResponse> {
+        return handleResult {
+            RetrofitObject.getRetrofitService.getReservesPassphrase(
+                userId,
+                reserveId
+            )
+        }
     }
 
     // singleton pattern

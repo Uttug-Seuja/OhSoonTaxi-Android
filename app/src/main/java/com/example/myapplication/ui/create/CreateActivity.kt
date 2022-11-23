@@ -132,6 +132,7 @@ class CreateActivity : AppCompatActivity() {
             viewModel.navigationEvent.collect {
                 when (it) {
                     is CreateNavigationAction.NavigateToHome -> {
+                        Toast.makeText(this@CreateActivity, "약속이 생겼어요", Toast.LENGTH_SHORT).show()
                         finish()
                     }
                 }
@@ -162,6 +163,8 @@ class CreateActivity : AppCompatActivity() {
                     binding.editStartPlace.setText(itemList[position].name)
                     startPlaceX = itemList[position].x
                     startPlaceY = itemList[position].y
+                    viewModel.startLatitudeEvent.value = startPlaceX!!.toDouble()
+                    viewModel.startLongitudeEvent.value = startPlaceY!!.toDouble()
 
                 }
 
@@ -171,6 +174,8 @@ class CreateActivity : AppCompatActivity() {
                     binding.editDestination.setText(itemList[position].name)
                     destinationX = itemList[position].x
                     destinationY = itemList[position].y
+                    viewModel.finishLatitudeEvent.value = destinationX!!.toDouble()
+                    viewModel.finishLongitudeEvent.value = destinationY!!.toDouble()
                 }
                 imm.hideSoftInputFromWindow(this@CreateActivity.currentFocus?.windowToken, 0)
                 listItems.clear()
@@ -488,12 +493,9 @@ class CreateActivity : AppCompatActivity() {
     fun addItemsAndMarkers(searchResult: ResultSearchKeyword?, type: Int) {
         if (!searchResult?.documents.isNullOrEmpty()) {
 
-            if (type == 0) {
-                binding.rvStartPlaceList.visibility = View.VISIBLE
+            if (type == 0) binding.rvStartPlaceList.visibility = View.VISIBLE
+            else binding.rvDestinationList.visibility = View.VISIBLE
 
-            } else {
-                binding.rvDestinationList.visibility = View.VISIBLE
-            }
 
             // 검색 결과 있음
             listItems.clear()                   // 리스트 초기화

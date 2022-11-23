@@ -15,6 +15,7 @@ object API {
     const val POST_USERS_SIGNIN: String = "/user/signIn"
     const val POST_USERS_CHECK_UNIQUE: String = "/user/checkUnique"
     const val POST_USERS_SIGN_OUT: String = "/user/signOut"
+    const val GET_USERS_MY_INFO: String = "/user/myInfo"
 
     // reserves
     const val POST_RESERVES_ADD : String = "/reservation/add"

@@ -20,6 +20,20 @@ class CreateRepository(application: Application) {
         return handleResult{ RetrofitObject.getRetrofitService.postReservesEdit(userId, reservesEdit)}
     }
 
+    // 경기 참여
+    suspend fun retrofitPostParticipation(
+        userId: String,
+        participation: Participation
+    ): BaseResult<Unit> {
+        return handleResult {
+            RetrofitObject.getRetrofitService.postParticipationAdd(
+                userId,
+                participation
+            )
+        }
+    }
+
+
 
     // singleton pattern
     companion object {
