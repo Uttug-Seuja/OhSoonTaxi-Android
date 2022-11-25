@@ -33,7 +33,7 @@ class UpdateViewModel(private val repository: CreateRepository) : BaseViewModel(
     }
 
 
-    fun onCreatePromiseClicked() {
+    fun onCreatePromiseClicked(reserveId : Int, userId : String) {
         viewModelScope.launch {
             Log.d("ttt", titleEvent.value.toString())
 
@@ -41,14 +41,13 @@ class UpdateViewModel(private val repository: CreateRepository) : BaseViewModel(
                 baseViewModelScope.launch {
                     repository.retrofitReservesEdit(
                         ReservesEdit(
-                            reserveId = 1,
+                            reservationId = reserveId,
                             title = titleEvent.value
 
                         ),
-                        userId = ""
+                        userId = userId
 
-                    )
-                        .onSuccess {
+                    ).onSuccess {
                             _navigationEvent.emit(UpdateNavigationAction.NavigateToDetail)
 
                         }

@@ -56,10 +56,10 @@ class DetailViewModel(private val repository: DetailRepository) : BaseViewModel(
     }
 
     // 게시글 삭제
-    fun deleteReservesRetrofit(userUid: String, reserveId: Int) = viewModelScope.launch {
+    fun deleteReservesRetrofit( reserveId: Int, userUid: String) = viewModelScope.launch {
 
         baseViewModelScope.launch {
-            repository.retrofitDeleteReserves(userUid, reserveId)
+            repository.retrofitDeleteReserves(reserveId, userUid)
                 .onSuccess {
                     _navigationEvent.emit(DetailNavigationAction.NavigateToBackNav)
                 }

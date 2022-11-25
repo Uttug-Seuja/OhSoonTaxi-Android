@@ -1,6 +1,6 @@
 package com.example.myapplication.data
 
 data class ReservesEdit(
-    val reserveId: Int,
+    val reservationId: Int,
     val title: String,
 )

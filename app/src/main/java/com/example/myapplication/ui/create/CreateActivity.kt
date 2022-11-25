@@ -163,8 +163,8 @@ class CreateActivity : AppCompatActivity() {
                     binding.editStartPlace.setText(itemList[position].name)
                     startPlaceX = itemList[position].x
                     startPlaceY = itemList[position].y
-                    viewModel.startLatitudeEvent.value = startPlaceX!!.toDouble()
-                    viewModel.startLongitudeEvent.value = startPlaceY!!.toDouble()
+                    viewModel.startLatitudeEvent.value = startPlaceY!!.toDouble()
+                    viewModel.startLongitudeEvent.value =startPlaceX!!.toDouble()
 
                 }
 
@@ -174,8 +174,8 @@ class CreateActivity : AppCompatActivity() {
                     binding.editDestination.setText(itemList[position].name)
                     destinationX = itemList[position].x
                     destinationY = itemList[position].y
-                    viewModel.finishLatitudeEvent.value = destinationX!!.toDouble()
-                    viewModel.finishLongitudeEvent.value = destinationY!!.toDouble()
+                    viewModel.finishLatitudeEvent.value = destinationY!!.toDouble()
+                    viewModel.finishLongitudeEvent.value =destinationX!!.toDouble()
                 }
                 imm.hideSoftInputFromWindow(this@CreateActivity.currentFocus?.windowToken, 0)
                 listItems.clear()

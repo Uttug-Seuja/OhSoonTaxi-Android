@@ -52,7 +52,7 @@ class CreateViewModel(private val repository: CreateRepository) : BaseViewModel(
             genderEvent = MutableStateFlow("모집 성별")
             dateEvent = MutableStateFlow("약속 날짜")
             reservationTimeEvent = MutableStateFlow("약속 시간")
-            passengerNumEvent = MutableStateFlow("모집 인원을 알려주세요")
+            passengerNumEvent = MutableStateFlow("")
             challengeWordEvent = MutableStateFlow("")
             countersignWordEvent = MutableStateFlow("")
             startLatitudeEvent = MutableStateFlow(0.0)
@@ -106,12 +106,10 @@ class CreateViewModel(private val repository: CreateRepository) : BaseViewModel(
                         finishLatitude = finishLatitudeEvent.value,
                         finishLongitude = finishLongitudeEvent.value
                     )
-                )
+                ).onSuccess {
 
-//                seatEvent.value[0].code,
-                    .onSuccess {
                         _navigationEvent.emit(CreateNavigationAction.NavigateToHome)
-//                        postParticipationRetrofit(userUid, seatEvent.value[0])
+                        postParticipationRetrofit(userUid, Participation(it.ReserveIdResponseData, seatEvent.value[0].toInt()))
                     }
                     .onError { e ->
                         Log.d("ttt", e.toString())

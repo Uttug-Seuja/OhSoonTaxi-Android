@@ -9,13 +9,17 @@ import com.example.myapplication.R
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.NavHostActivity
+import com.example.myapplication.common.GlobalApplication
 import com.example.myapplication.databinding.ActivityUpdateBinding
 import com.example.myapplication.ui.create.CreateNavigationAction
 import com.example.myapplication.ui.detail.DetailActivity
+import kotlinx.coroutines.launch
 
 class UpdateActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivityUpdateBinding.inflate(layoutInflater) }
+    private var reserveId: Int? = null
+    private var userUid: String? = null
 
     private val viewModel by lazy {
         ViewModelProvider(
@@ -28,6 +32,14 @@ class UpdateActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         binding.viewmodel = viewModel
+        reserveId = intent.getIntExtra("reserveId", 0)
+
+        lifecycleScope.launch {
+            GlobalApplication.getInstance().getDataStore().userUid.collect { it ->
+                userUid = it
+
+            }
+        }
 
         setSupportActionBar(binding.mainToolbar) // 툴바를 액티비티의 앱바로 지정
         supportActionBar?.setDisplayHomeAsUpEnabled(true) // 드로어를 꺼낼 홈 버튼 활성화
@@ -46,9 +58,7 @@ class UpdateActivity : AppCompatActivity() {
             viewModel.navigationEvent.collect {
                 when (it) {
                     is UpdateNavigationAction.NavigateToDetail -> {
-                        val intent = Intent(this@UpdateActivity, DetailActivity::class.java)
-                        intent.putExtra("id", "2022-12-06")
-                        intent.putExtra("password", "이건희")
+                        intent.putExtra("reserveId", reserveId)
                         setResult(RESULT_OK, intent)
                         finish()
                     }
@@ -59,9 +69,8 @@ class UpdateActivity : AppCompatActivity() {
     }
 
     private fun setOnClickListener() {
-
         binding.startBtn.setOnClickListener {
-            viewModel.onCreatePromiseClicked()
+            viewModel.onCreatePromiseClicked(reserveId!!, userUid!!)
         }
     }
 

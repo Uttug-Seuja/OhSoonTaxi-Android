@@ -26,7 +26,7 @@ object RetrofitObject {
             }
         }
 
-        CoroutineScope(Dispatchers.IO).launch{
+        CoroutineScope(Dispatchers.IO).launch {
             GlobalApplication.getInstance().getDataStore().refreshToken.collect { it ->
                 refreshToken = it
             }
@@ -58,7 +58,10 @@ object RetrofitObject {
                 Log.d("tttdasd2123", refreshToken)
 
                 response
-            } else if (original.url.encodedPath.equals(POST_USERS_CHECK_UNIQUE, true)
+            } else if (original.url.encodedPath.equals(
+                    POST_USERS_CHECK_UNIQUE,
+                    true
+                ) || original.url.encodedPath.equals(POST_USERS_SIGNUP, true)
             ) {
 
 

@@ -9,15 +9,28 @@ import com.example.myapplication.network.handleResult
 class CreateRepository(application: Application) {
 
     // 게시글 생성
-    suspend fun retrofitReservesCreation(userUid : String, reservesCreation: ReservesCreation): BaseResult<Unit> {
+    suspend fun retrofitReservesCreation(
+        userUid: String,
+        reservesCreation: ReservesCreation
+    ): BaseResult<ReserveIdResponse> {
 
-        return handleResult{ RetrofitObject.getRetrofitService.postReservesAdd(userUid, reservesCreation)}
+        return handleResult {
+            RetrofitObject.getRetrofitService.postReservesAdd(
+                userUid,
+                reservesCreation
+            )
+        }
 
     }
 
     // 게시글 수정
     suspend fun retrofitReservesEdit(reservesEdit: ReservesEdit, userId: String): BaseResult<Unit> {
-        return handleResult{ RetrofitObject.getRetrofitService.postReservesEdit(userId, reservesEdit)}
+        return handleResult {
+            RetrofitObject.getRetrofitService.postReservesEdit(
+                userId,
+                reservesEdit
+            )
+        }
     }
 
     // 경기 참여
@@ -32,8 +45,6 @@ class CreateRepository(application: Application) {
             )
         }
     }
-
-
 
     // singleton pattern
     companion object {

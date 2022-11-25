@@ -16,8 +16,8 @@ class DetailRepository(application: Application) {
     }
 
     // 경기 삭제
-    suspend fun retrofitDeleteReserves(userUid: String, reserveId: Int): BaseResult<Unit> {
-        return handleResult { RetrofitObject.getRetrofitService.deleteReserves(userUid, reserveId) }
+    suspend fun retrofitDeleteReserves(reserveId: Int, userUid: String): BaseResult<Unit> {
+        return handleResult { RetrofitObject.getRetrofitService.deleteReserves(reserveId, userUid) }
     }
 
     // 경기 상태

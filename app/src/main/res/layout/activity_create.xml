@@ -162,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:background="@null"
-                android:text="@={viewmodel.genderEvent}"
+                android:text="@={viewmodel.passengerNumEvent}"
                 android:ems="10"
                 android:hint="모집 인원을 알려주세요"
                 android:inputType="number"

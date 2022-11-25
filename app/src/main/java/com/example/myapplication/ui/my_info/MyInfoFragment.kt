@@ -31,7 +31,8 @@ class MyInfoFragment : Fragment() {
     private var _binding: FragmentMyInfoBinding? = null
     private val binding get() = _binding!!
     private var userUid: String? = null
-
+    private val sex =
+        hashMapOf<String, String>("MAN" to "남자", "WOMAN" to "여자")
     private val viewModel by lazy {
         ViewModelProvider(
             this,
@@ -93,7 +94,7 @@ class MyInfoFragment : Fragment() {
             viewModel.retrofitGetMyInfoEvent.collect {
                 binding.titleText.text = it.myInfoResponseData.name
                 binding.subTitleText.text =
-                    "${it.myInfoResponseData.sex} #${it.myInfoResponseData.schoolNum}"
+                    "${sex[it.myInfoResponseData.sex]} #${it.myInfoResponseData.schoolNum}"
             }
         }
 

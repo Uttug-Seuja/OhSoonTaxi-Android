@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
-import android.location.Location
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -27,7 +25,6 @@ import com.example.myapplication.common.GlobalApplication
 import com.example.myapplication.data.Participation
 import com.example.myapplication.data.Participations
 import com.example.myapplication.databinding.ActivityDetailBinding
-import com.example.myapplication.ui.signin.SigninActivity
 import com.example.myapplication.ui.update.UpdateActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.launch
@@ -54,6 +51,8 @@ class DetailActivity : AppCompatActivity() {
     private var seatAnswerList = mutableListOf<Boolean>(false, false, false, false)
     private var seatAnswer = -1
     private var reserveDate: String? = null
+    private val sex =
+        hashMapOf<String, String>("MAN" to "남자", "WOMAN" to "여자")
     private val gender =
         hashMapOf<String, String>("ALL" to "남녀모두", "MAN" to "남자만", "WOMAN" to "여자만")
     private val reserveStatus =
@@ -79,6 +78,7 @@ class DetailActivity : AppCompatActivity() {
     private var countersignWord: String? = null
     private var reserveId: Int? = null
     private var userUid: String? = null
+    private var hostUid: String? = null
 
 
     private val seatSelectButton = mutableListOf(
@@ -115,14 +115,14 @@ class DetailActivity : AppCompatActivity() {
 
         lifecycleScope.launchWhenStarted {
             viewModel.retrofitReservesEvent.collect {
+                hostUid = it.name
 
                 val createdAtSplit = it.createdAt.split("T")
                 val createdAtSplitDate = createdAtSplit[0]
                 val createdAtSplitTime = createdAtSplit[1].substring(0, 5)
 
-
                 binding.mainToolbarText.text = "${it.startingPlace} -> ${it.destination}"
-                binding.nameText.text = "${it.name}(${gender[it.userSex]})"
+                binding.nameText.text = "${it.name}(${sex[it.userSex]})"
                 binding.schoolNumText.text = "${it.schoolNum.substring(2, 4)}학번"
                 binding.titleText.text = it.title
                 binding.createdAtText.text = "$createdAtSplitDate $createdAtSplitTime"
@@ -242,14 +242,14 @@ class DetailActivity : AppCompatActivity() {
 
         Log.d("ttt makeBottomSheetView", selectSeatPosition.toString())
 
-        if (selectSeatPosition!!.size != 0){
+        if (selectSeatPosition!!.size != 0) {
             selectSeatPosition!!.forEach {
                 seatAnswerList[it.seatPosition] = true
                 bottomSheetView.findViewById<TextView>(seatSelectButton[it.seatPosition]).text =
                     "${it.schoolNum.substring(2, 4)}학번\n${it.name}"
             }
 
-        }else{
+        } else {
             seatAnswerList = mutableListOf<Boolean>(false, false, false, false)
 
         }
@@ -366,7 +366,6 @@ class DetailActivity : AppCompatActivity() {
             }
         }
 
-
         // 좌석 선택 버튼
         bottomSheetView.findViewById<View>(R.id.seat_answer_btn).setOnClickListener {
             if (seatAnswer == -1) {
@@ -374,11 +373,11 @@ class DetailActivity : AppCompatActivity() {
             } else {
                 Log.d("Ttt seatAnswer", seatAnswer.toString())
                 bottomSheetDialog!!.dismiss()
-                viewModel.postParticipationRetrofit(userUid!!, Participation(reserveId!!, seatAnswer))
-
+                viewModel.postParticipationRetrofit(
+                    userUid!!,
+                    Participation(reserveId!!, seatAnswer)
+                )
             }
-
-
         }
     }
 
@@ -482,6 +481,13 @@ class DetailActivity : AppCompatActivity() {
     //액션버튼 메뉴 액션바에 집어 넣기
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu!!)
+        Log.d("ttt hostUid", hostUid.toString())
+        Log.d("ttt userUid", userUid.toString())
+
+        if (hostUid == userUid) {
+            menu.findItem(R.id.edit_btn).isVisible = false
+            menu.findItem(R.id.delete_btn).isVisible = false
+        }
         menu.findItem(R.id.edit_btn).isVisible = true
         menu.findItem(R.id.delete_btn).isVisible = true
 
@@ -492,11 +498,11 @@ class DetailActivity : AppCompatActivity() {
     private val registerForActivityResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val id = result.data?.getStringExtra("id") ?: ""
+                val reserveId = result.data?.getIntExtra("reserveId", 0)
                 val password = result.data?.getStringExtra("password") ?: ""
-//                viewModel.reservesSportDateRetrofit("SOCCER", id)
+                viewModel.reservesRetrofit(reserveId!!)
 
-                Log.d("ttt Detail", id)
+                Log.d("ttt Detail", reserveId!!.toString())
                 Log.d("ttt", password)
 
             }
@@ -518,10 +524,12 @@ class DetailActivity : AppCompatActivity() {
 
             R.id.edit_btn -> {
                 val intent = Intent(this@DetailActivity, UpdateActivity::class.java)
+                intent.putExtra("reserveId", reserveId)
                 registerForActivityResult.launch(intent)
 
             }
             R.id.delete_btn -> {
+                viewModel.deleteReservesRetrofit(reserveId!!, userUid!!)
                 Toast.makeText(this, "삭제 완료", Toast.LENGTH_SHORT).show()
 
             }

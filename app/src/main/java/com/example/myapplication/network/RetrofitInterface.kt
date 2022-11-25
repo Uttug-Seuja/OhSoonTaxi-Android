@@ -29,9 +29,9 @@ interface RetrofitInterface {
 
     // 아이디 중복확인
     @Headers("Content-Type: application/json")
-    @POST(API.POST_USERS_CHECK_UNIQUE)
+    @GET(API.POST_USERS_CHECK_UNIQUE)
     suspend fun postUsersCheckUnique(
-        @Body uid: String,
+        @Query("uid") uid: String,
     )
 
     // 로그아읏
@@ -55,14 +55,14 @@ interface RetrofitInterface {
     suspend fun postReservesAdd(
         @Query("userUid") userUid: String,
         @Body reservesCreation: ReservesCreation,
-    )
+    ) : ReserveIdResponse
 
     // 경기 삭제
     @Headers("Content-Type: application/json")
-    @DELETE(API.DELETE_RESERVES)
+    @HTTP(method = "DELETE", path = API.DELETE_RESERVES, hasBody = true)
     suspend fun deleteReserves(
-        @Query("userUid") userUid: String,
         @Path("reservationId") reservationId: Int,
+        @Query("userUid") userUid: String,
     )
 
     // 약속 세부 정보 제공
