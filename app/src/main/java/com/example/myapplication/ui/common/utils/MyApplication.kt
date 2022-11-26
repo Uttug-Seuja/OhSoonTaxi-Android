@@ -1,8 +1,8 @@
-package com.example.myapplication.common.utils
+package com.example.myapplication.ui.common.utils
 
 
 import android.app.Application
-import com.example.myapplication.common.base.DataStoreModule
+import com.example.myapplication.ui.common.base.DataStoreModule
 
 class MyApplication : Application(){
 

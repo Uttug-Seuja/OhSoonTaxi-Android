@@ -1,7 +1,7 @@
-package com.example.myapplication.common
+package com.example.myapplication.ui.common
 
 import android.app.Application
-import com.example.myapplication.common.base.DataStoreModule
+import com.example.myapplication.ui.common.base.DataStoreModule
 import org.conscrypt.Conscrypt
 import java.security.Security
 

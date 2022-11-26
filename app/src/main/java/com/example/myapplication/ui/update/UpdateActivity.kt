@@ -1,6 +1,5 @@
 package com.example.myapplication.ui.update
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -8,11 +7,8 @@ import android.widget.Toast
 import com.example.myapplication.R
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.example.myapplication.NavHostActivity
-import com.example.myapplication.common.GlobalApplication
+import com.example.myapplication.ui.common.GlobalApplication
 import com.example.myapplication.databinding.ActivityUpdateBinding
-import com.example.myapplication.ui.create.CreateNavigationAction
-import com.example.myapplication.ui.detail.DetailActivity
 import kotlinx.coroutines.launch
 
 class UpdateActivity : AppCompatActivity() {

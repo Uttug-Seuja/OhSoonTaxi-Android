@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import com.example.myapplication.data.Login
 import com.example.myapplication.data.User
-import com.example.myapplication.mapper.toDomain
+import com.example.myapplication.repository.mapper.toDomain
 import com.example.myapplication.network.BaseResult
 import com.example.myapplication.network.RetrofitObject
 import com.example.myapplication.network.handleResult

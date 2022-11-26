@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.R
-import com.example.myapplication.common.GlobalApplication
+import com.example.myapplication.ui.common.GlobalApplication
 import com.example.myapplication.databinding.FragmentHomeBinding
 import com.example.myapplication.databinding.FragmentMyInfoBinding
 import com.example.myapplication.ui.home.HomeFragment

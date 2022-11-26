@@ -1,4 +1,4 @@
-package com.example.myapplication.mapper
+package com.example.myapplication.repository.mapper
 
 import com.example.myapplication.data.Login
 import com.example.myapplication.data.Participations

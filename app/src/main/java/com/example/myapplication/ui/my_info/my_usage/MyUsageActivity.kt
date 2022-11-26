@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.R
 import com.example.myapplication.adapter.MatchAdapter
 import com.example.myapplication.adapter.MyReservesAdapter
-import com.example.myapplication.common.GlobalApplication
+import com.example.myapplication.ui.common.GlobalApplication
 import com.example.myapplication.data.ReservesListResponseData
 import com.example.myapplication.databinding.ActivityMyUsageBinding
 import com.example.myapplication.ui.detail.DetailActivity

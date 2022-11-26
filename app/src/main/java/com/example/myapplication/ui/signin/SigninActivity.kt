@@ -3,18 +3,12 @@ package com.example.myapplication.ui.signin
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.example.myapplication.NavHostActivity
-import com.example.myapplication.data.Login
+import com.example.myapplication.ui.NavHostActivity
 import com.example.myapplication.databinding.ActivitySigninBinding
 import com.example.myapplication.ui.signup.SignupActivity
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.launch
 
 class SigninActivity : AppCompatActivity() {
     private val binding by lazy { ActivitySigninBinding.inflate(layoutInflater) }

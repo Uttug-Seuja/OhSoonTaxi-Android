@@ -1,6 +1,6 @@
 package com.example.myapplication.network
 
-import com.example.myapplication.common.utils.API
+import com.example.myapplication.ui.common.utils.API
 import com.example.myapplication.data.*
 import com.example.myapplication.data.ReservesCreation
 import com.google.gson.JsonObject

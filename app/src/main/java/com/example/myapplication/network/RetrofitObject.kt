@@ -1,11 +1,11 @@
 package com.example.myapplication.network
 
 import android.util.Log
-import com.example.myapplication.common.GlobalApplication
-import com.example.myapplication.common.utils.API
-import com.example.myapplication.common.utils.API.POST_USERS_CHECK_UNIQUE
-import com.example.myapplication.common.utils.API.POST_USERS_SIGNIN
-import com.example.myapplication.common.utils.API.POST_USERS_SIGNUP
+import com.example.myapplication.ui.common.GlobalApplication
+import com.example.myapplication.ui.common.utils.API
+import com.example.myapplication.ui.common.utils.API.POST_USERS_CHECK_UNIQUE
+import com.example.myapplication.ui.common.utils.API.POST_USERS_SIGNIN
+import com.example.myapplication.ui.common.utils.API.POST_USERS_SIGNUP
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

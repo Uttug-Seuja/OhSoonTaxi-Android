@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
-import com.example.myapplication.common.GlobalApplication
-import com.example.myapplication.common.base.BaseViewModel
+import com.example.myapplication.ui.common.GlobalApplication
+import com.example.myapplication.ui.common.base.BaseViewModel
 import com.example.myapplication.data.Participation
 import com.example.myapplication.network.onError
 import com.example.myapplication.network.onSuccess

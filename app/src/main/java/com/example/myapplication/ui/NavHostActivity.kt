@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.ui
 
 import android.Manifest
 import android.content.Intent
@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.example.myapplication.R
 import com.example.myapplication.databinding.ActivityNavhostBinding
 import com.example.myapplication.ui.create.CreateActivity
 import com.example.myapplication.ui.home.HomeFragment
@@ -67,7 +68,7 @@ class NavHostActivity : AppCompatActivity() {
 
 
             }
-            R.id.navigation_notifications-> {
+            R.id.navigation_notifications -> {
                 notificationsFragment = NotificationsFragment().newInstance()
                 supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment_activity_main, notificationsFragment).commit()
                 Log.d("ttt","알림 목록")

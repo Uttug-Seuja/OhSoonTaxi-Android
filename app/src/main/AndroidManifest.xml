@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".common.GlobalApplication"
+        android:name=".ui.common.GlobalApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -53,7 +53,7 @@
             android:name=".ui.signup.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".NavHostActivity"
+            android:name=".ui.NavHostActivity"
             android:exported="true" />
         <activity
             android:name=".ui.detail.DetailActivity"

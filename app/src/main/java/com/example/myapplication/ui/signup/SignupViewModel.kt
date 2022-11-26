@@ -7,7 +7,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.myapplication.common.base.BaseViewModel
+import com.example.myapplication.ui.common.base.BaseViewModel
 import com.example.myapplication.data.User
 import com.example.myapplication.network.BaseResult
 import com.example.myapplication.network.onError

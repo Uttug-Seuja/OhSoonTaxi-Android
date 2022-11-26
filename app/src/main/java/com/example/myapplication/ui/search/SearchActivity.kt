@@ -19,7 +19,7 @@ import com.example.myapplication.R
 import com.example.myapplication.adapter.MatchAdapter
 import com.example.myapplication.adapter.MyReservesAdapter
 import com.example.myapplication.databinding.ActivitySearchBinding
-import com.example.myapplication.common.utils.textChangesToFlow
+import com.example.myapplication.ui.common.utils.textChangesToFlow
 import com.example.myapplication.data.ReservesListResponseData
 import com.example.myapplication.ui.detail.DetailActivity
 import com.google.android.material.navigation.NavigationView

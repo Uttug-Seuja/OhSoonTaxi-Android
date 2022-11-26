@@ -28,7 +28,7 @@ import com.example.myapplication.data.ModelKakaoLocal
 import com.example.myapplication.data.ResultSearchKeyword
 import com.example.myapplication.databinding.ActivityCreateBinding
 import com.example.myapplication.network.KakaoLocalInterface
-import com.example.myapplication.common.utils.textChangesToFlow
+import com.example.myapplication.ui.common.utils.textChangesToFlow
 import com.example.myapplication.ui.home.HomeNavigationAction
 import com.example.myapplication.ui.search.SearchActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog

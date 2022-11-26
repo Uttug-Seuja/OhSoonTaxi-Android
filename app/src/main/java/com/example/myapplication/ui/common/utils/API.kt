@@ -1,4 +1,4 @@
-package com.example.myapplication.common.utils
+package com.example.myapplication.ui.common.utils
 
 import com.example.myapplication.BuildConfig
 

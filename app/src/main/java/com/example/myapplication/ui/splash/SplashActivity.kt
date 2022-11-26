@@ -6,13 +6,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.lifecycleScope
-import com.example.myapplication.NavHostActivity
-import com.example.myapplication.common.GlobalApplication
+import com.example.myapplication.ui.NavHostActivity
+import com.example.myapplication.ui.common.GlobalApplication
 import com.example.myapplication.databinding.ActivitySplashBinding
-import com.example.myapplication.network.RetrofitObject
 import com.example.myapplication.ui.signin.SigninActivity
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {

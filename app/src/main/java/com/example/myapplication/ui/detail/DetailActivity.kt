@@ -17,11 +17,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.example.myapplication.NavHostActivity
+import com.example.myapplication.ui.NavHostActivity
 import com.example.myapplication.R
 import com.example.myapplication.adapter.CustomBalloonAdapter
 import com.example.myapplication.adapter.MarkerEventListener
-import com.example.myapplication.common.GlobalApplication
+import com.example.myapplication.ui.common.GlobalApplication
 import com.example.myapplication.data.Participation
 import com.example.myapplication.data.Participations
 import com.example.myapplication.databinding.ActivityDetailBinding

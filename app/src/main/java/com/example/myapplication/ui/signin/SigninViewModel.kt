@@ -1,18 +1,13 @@
 package com.example.myapplication.ui.signin
 
 import android.app.Application
-import android.content.Intent
 import android.database.sqlite.SQLiteException
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.example.myapplication.NavHostActivity
-import com.example.myapplication.common.GlobalApplication
-import com.example.myapplication.common.base.BaseViewModel
+import com.example.myapplication.ui.common.GlobalApplication
+import com.example.myapplication.ui.common.base.BaseViewModel
 import com.example.myapplication.data.Login
-import com.example.myapplication.data.*
 import com.example.myapplication.network.onError
 import com.example.myapplication.network.onSuccess
 import com.example.myapplication.repository.UserRepository
@@ -20,7 +15,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
-import okhttp3.internal.notify
 
 class SigninViewModel(private val repository: UserRepository) : BaseViewModel() {
 

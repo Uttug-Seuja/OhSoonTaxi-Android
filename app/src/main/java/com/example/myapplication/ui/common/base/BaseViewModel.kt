@@ -1,4 +1,4 @@
-package com.example.myapplication.common.base
+package com.example.myapplication.ui.common.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,4 +1,4 @@
-package com.example.myapplication.common.utils
+package com.example.myapplication.ui.common.utils
 
 import android.graphics.Color
 import android.text.Editable

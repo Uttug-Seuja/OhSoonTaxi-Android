@@ -2,7 +2,7 @@ package com.example.myapplication.repository
 
 import android.app.Application
 import com.example.myapplication.data.*
-import com.example.myapplication.mapper.toDomain
+import com.example.myapplication.repository.mapper.toDomain
 import com.example.myapplication.network.BaseResult
 import com.example.myapplication.network.RetrofitObject
 import com.example.myapplication.network.handleResult
